@@ -4,10 +4,14 @@ const userModel = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       email: {
         type: DataTypes.STRING,
@@ -18,9 +22,12 @@ const userModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+
+      location: { type: DataTypes.STRING, allowNull: false },
+      phone: { type: DataTypes.STRING, allowNull: false },
       role: {
-        type: DataTypes.ENUM("renter", "owner", "admin"),
-        defaultValue: "renter",
+        type: DataTypes.ENUM("customer", "owner", "admin"),
+        defaultValue: "customer",
       },
     },
     {

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/index.js";
+import db from "../models/index.js";
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -10,7 +10,7 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findByPk(decoded.id);
+    const user = await db.User.findByPk(decoded.id);
 
     if (!user) {
       return res.status(401).json({ error: "Invalid token" });

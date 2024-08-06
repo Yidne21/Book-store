@@ -3,15 +3,17 @@ import userModel from "./user.js";
 import bookModel from "./book.js";
 import rentalModel from "./rental.js";
 import dotenv from "dotenv";
+import * as value from "../config/enviroments.js";
 
 dotenv.config();
+console.log(value.db_name);
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
+  value.db_name,
+  value.db_user,
+  value.db_password,
   {
-    host: process.env.DB_HOST,
+    host: value.db_host,
     dialect: "postgres",
   }
 );
@@ -26,13 +28,13 @@ db.Book = bookModel(sequelize, DataTypes);
 db.Rental = rentalModel(sequelize, DataTypes);
 
 // Define associations
-db.User.hasMany(db.Book);
-db.Book.belongsTo(db.User);
+db.User.hasMany(db.Book, { foreignKey: "ownerId" });
+db.Book.belongsTo(db.User, { foreignKey: "ownerId" });
 
-db.User.hasMany(db.Rental);
-db.Rental.belongsTo(db.User);
+db.User.hasMany(db.Rental, { foreignKey: "borrowerId" });
+db.Rental.belongsTo(db.User, { foreignKey: "borrowerId" });
 
-db.Book.hasMany(db.Rental);
-db.Rental.belongsTo(db.Book);
+db.Book.hasMany(db.Rental, { foreignKey: "bookId" });
+db.Rental.belongsTo(db.Book, { foreignKey: "bookId" });
 
 export default db;

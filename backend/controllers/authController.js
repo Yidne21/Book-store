@@ -1,22 +1,31 @@
-import { User } from "../models/index.js";
+import db from "../models/index.js";
 import jwt from "jsonwebtoken";
 
-export const register = async (req, res) => {
-  const { username, email, password, role } = req.body;
+export const signUp = async (req, res) => {
+  const { username, email, password, location, phone, role } = req.body;
 
   try {
-    const user = await User.create({ username, email, password, role });
+    const user = await db.User.create({
+      username,
+      email,
+      password,
+      role,
+      location,
+      phone,
+    });
     res.status(201).json(user);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
 
 export const login = async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await db.User.findOne({ where: { email } });
     if (!user || !(await user.validPassword(password))) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
