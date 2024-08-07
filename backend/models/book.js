@@ -31,15 +31,19 @@ const bookModel = (sequelize, DataTypes) => {
     },
     availableQuantity: {
       type: DataTypes.INTEGER,
-      defaultValue: 1,
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     rentPrice: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM("active", "disabled"),
-      defaultValue: "disabled",
+      type: DataTypes.ENUM("approved", "unapproved"),
+      defaultValue: "unapproved",
     },
   });
 
