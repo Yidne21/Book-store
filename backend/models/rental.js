@@ -12,6 +12,22 @@ const rentalModel = (sequelize, DataTypes) => {
     returnDate: {
       type: DataTypes.DATE,
     },
+    borrowerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    bookId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM("borrowed", "returned"),
+      defaultValue: "borrowed",
+    },
   });
 
   return Rental;

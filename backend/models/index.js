@@ -15,6 +15,7 @@ const sequelize = new Sequelize(
   {
     host: value.db_host,
     dialect: "postgres",
+    logging: false,
   }
 );
 
@@ -36,5 +37,8 @@ db.Rental.belongsTo(db.User, { foreignKey: "borrowerId" });
 
 db.Book.hasMany(db.Rental, { foreignKey: "bookId" });
 db.Rental.belongsTo(db.Book, { foreignKey: "bookId" });
+
+db.User.hasMany(db.Rental, { foreignKey: "ownerId" });
+db.Rental.belongsTo(db.User, { foreignKey: "ownerId" });
 
 export default db;

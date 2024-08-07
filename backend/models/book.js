@@ -5,6 +5,18 @@ const bookModel = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    bookNumber: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+    },
+    ownerId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    coverPhotoUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,9 +33,13 @@ const bookModel = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 1,
     },
+    rentPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     status: {
-      type: DataTypes.ENUM("available", "unavailable"),
-      defaultValue: "available",
+      type: DataTypes.ENUM("active", "disabled"),
+      defaultValue: "disabled",
     },
   });
 

@@ -25,6 +25,10 @@ const userModel = (sequelize, DataTypes) => {
 
       location: { type: DataTypes.STRING, allowNull: false },
       phone: { type: DataTypes.STRING, allowNull: false },
+      status: {
+        type: DataTypes.ENUM("active", "disabled"),
+        defaultValue: "disabled",
+      },
       role: {
         type: DataTypes.ENUM("customer", "owner", "admin"),
         defaultValue: "customer",

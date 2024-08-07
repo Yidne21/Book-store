@@ -4,8 +4,9 @@ export function defineAbilityFor(user) {
   const { can, cannot, build } = new AbilityBuilder(Ability);
 
   if (user.role === "admin") {
-    can("read", "User");
-    can("approve", "User");
+    can("filter", "Owner");
+    can("approve", "Owner");
+    can("disable", "Owner");
     can("approve", "Book");
     can("read", "Book");
   } else if (user.role === "owner") {
