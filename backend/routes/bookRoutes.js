@@ -21,7 +21,13 @@ router.post(
   createBook
 );
 router.get("/", authMiddleware, authorize("filter", "Book"), filterBooks);
-router.put("/:bookId", authMiddleware, authorize("update", "Book"), updateBook);
+router.put(
+  "/:bookId",
+  authMiddleware,
+  authorize("update", "Book"),
+  multerUploads.single("file"),
+  updateBook
+);
 router.delete(
   "/:bookId",
   authMiddleware,

@@ -1,8 +1,7 @@
 import express from "express";
 import {
   getListOfOwners,
-  approveOwner,
-  disableOwner,
+  updateOwnerStatus,
 } from "../controllers/userController";
 import authenticateJwt from "../middlewares/authMiddleware";
 import { authorize } from "../middlewares/caslMiddleware";
@@ -20,14 +19,14 @@ router.put(
   "/approve/:ownerId",
   authenticateJwt,
   authorize("approve", "Owner"),
-  approveOwner
+  updateOwnerStatus
 );
 
 router.put(
   "/disable/:ownerId",
   authenticateJwt,
   authorize("disable", "Owner"),
-  disableOwner
+  updateOwnerStatus
 );
 
 export default router;

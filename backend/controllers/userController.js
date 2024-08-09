@@ -47,39 +47,21 @@ export const getListOfOwners = async (req, res, next) => {
   }
 };
 
-export const approveOwner = async (req, res, next) => {
+export const updateOwnerStatus = async (req, res, next) => {
   const { ownerId } = req.params;
+  const { status } = req.body;
   try {
     const user = await db.User.findOne({ where: { id: ownerId } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    if (user.role === "owner" && user.status === "disabled") {
-      user.status = "active";
+    if (user.role === "owner") {
+      user.status = status;
       await user.save();
-      return res.status(200).json({ message: "Owner approved" });
+      return res.status(200).json({ message: `Owner status ${status}` });
     }
-    return res.status(400).json({ error: "User is already approved" });
-  } catch (error) {
-    next(error);
-    console.log(error);
-    res.status(400).json({ error: error.message });
-  }
-};
 
-export const disableOwner = async (req, res, next) => {
-  const { ownerId } = req.params;
-  try {
-    const user = await db.User.findOne({ where: { id: ownerId } });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    if (user.role === "owner" && user.status === "active") {
-      user.status = "disabled";
-      await user.save();
-      return res.status(200).json({ message: "Owner disabled" });
-    }
-    return res.status(400).json({ error: "User is already disabled" });
+    return res.status(400).json({ error: "User is not an owner" });
   } catch (error) {
     next(error);
     console.log(error);

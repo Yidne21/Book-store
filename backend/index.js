@@ -8,6 +8,7 @@ import rentalRoutes from "./routes/rentalRoutes.js";
 import cors from "cors";
 import * as value from "./config/enviroments.js";
 import { cloudinaryConfig } from "./config/cloudinary.js";
+import seedData from "./seeders/seedDummy.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use("/api/rentals", rentalRoutes);
 const PORT = value.port || 5000;
 
 db.sequelize.sync().then(() => {
+  // seedData();
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });

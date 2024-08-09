@@ -21,7 +21,6 @@ export const signUp = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   try {
@@ -38,7 +37,15 @@ export const login = async (req, res) => {
       }
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      username: user.username,
+      email: user.email,
+      location: user.location,
+      phone: user.phone,
+      role: user.role,
+      balance: user.balance,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

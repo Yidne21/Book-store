@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import userModel from "./user.js";
 import bookModel from "./book.js";
 import rentalModel from "./rental.js";
+import categoryModel from "./category.js";
 import dotenv from "dotenv";
 import * as value from "../config/enviroments.js";
 
@@ -27,6 +28,7 @@ db.sequelize = sequelize;
 db.User = userModel(sequelize, DataTypes);
 db.Book = bookModel(sequelize, DataTypes);
 db.Rental = rentalModel(sequelize, DataTypes);
+db.Category = categoryModel(sequelize, DataTypes);
 
 // Define associations
 db.User.hasMany(db.Book, { foreignKey: "ownerId" });

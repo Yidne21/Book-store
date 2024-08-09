@@ -88,16 +88,22 @@ export const filterBooks = async (req, res) => {
 };
 
 export const updateBook = async (req, res) => {
-  const { title, author, category, quantity, rentPrice, coverPhotoUrl } =
-    req.body;
-
+  const { title, author, category, quantity, rentPrice } = req.body;
+  let imageFile;
+  let coverPhotoUrl;
+  if (req.file) {
+    imageFile = req.file;
+  }
   try {
+    if (imageFile) {
+      coverPhotoUrl = await uploadFile(imageFile);
+    }
     const book = await db.Book.findByPk(req.params.bookId);
     if (book) {
       book.title = title || book.title;
       book.author = author || book.author;
       book.category = category || book.category;
-      book.quantity = quantity || book.quantity;
+      book.quantity = parseInt(quantity) || book.quantity;
       book.rentPrice = rentPrice || book.rentPrice;
       book.coverPhotoUrl = coverPhotoUrl || book.coverPhotoUrl;
       await book.save();
@@ -144,24 +150,6 @@ export const updateBookStatus = async (req, res) => {
       book.status = status;
       await book.save();
       res.json({ message: `Book is ${status}` });
-    } else {
-      res.status(404).json({ error: "Book not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const uploadCoverPhoto = async (req, res) => {
-  const { bookId } = req.params;
-  const { coverPhotoUrl } = req.body;
-
-  try {
-    const book = await db.Book.findByPk(bookId);
-    if (book) {
-      book.coverPhotoUrl = coverPhotoUrl;
-      await book.save();
-      res.json(book);
     } else {
       res.status(404).json({ error: "Book not found" });
     }
