@@ -9,6 +9,7 @@ export function defineAbilityFor(user) {
     can("disable", "Owner");
     can("approve", "Book");
     can("filter", "Book");
+    can("unapprove", "Book");
   } else if (user.role === "owner") {
     can("read", "Book", { userId: user.id });
     can("update", "Book", { userId: user.id });
@@ -19,9 +20,9 @@ export function defineAbilityFor(user) {
     can("delete", "Rental", { userId: user.id });
     can("create", "Rental");
   } else if (user.role === "customer") {
-    can("read", "Book");
-    can("read", "Rental", { userId: user.id });
-    can("create", "Rental", { userId: user.id });
+    can("read", "LiveBook");
+    can("return", "Book", { userId: user.id });
+    can("rent", "Book", { userId: user.id });
   }
 
   return build();

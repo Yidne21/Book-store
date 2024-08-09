@@ -6,6 +6,7 @@ import {
   deleteBook,
   myBooks,
   approveBook,
+  rejectBook,
 } from "../controllers/bookController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/caslMiddleware.js";
@@ -27,5 +28,11 @@ router.put(
   authMiddleware,
   authorize("approve", "Book"),
   approveBook
+);
+router.put(
+  "/reject/:bookId",
+  authMiddleware,
+  authorize("unapprove", "Book"),
+  rejectBook
 );
 export default router;

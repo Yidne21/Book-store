@@ -42,7 +42,12 @@ const bookModel = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM("approved", "unapproved"),
+      type: DataTypes.ENUM(
+        "approved",
+        "unapproved",
+        "available",
+        "unavailable"
+      ),
       defaultValue: "unapproved",
     },
   });

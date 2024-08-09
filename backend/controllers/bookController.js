@@ -93,3 +93,20 @@ export const approveBook = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const rejectBook = async (req, res) => {
+  const { bookId } = req.params;
+
+  try {
+    const book = await db.Book.findByPk(bookId);
+    if (book) {
+      book.status = "unapproved";
+      await book.save();
+      res.json({ message: "Book unapproved" });
+    } else {
+      res.status(404).json({ error: "Book not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -4,7 +4,7 @@ import db from "./models/index.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import bookRoutes from "./routes/bookRoutes.js";
-// import rentalRoutes from "./routes/rentalRoutes.js";
+import rentalRoutes from "./routes/rentalRoutes.js";
 import cors from "cors";
 import * as value from "./config/enviroments.js";
 
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/books", bookRoutes);
-// app.use("/api/rentals", rentalRoutes);
+app.use("/api/rentals", rentalRoutes);
 
 const PORT = value.port || 5000;
 
