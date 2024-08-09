@@ -24,8 +24,18 @@ const rentalModel = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    rentPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
     status: {
-      type: DataTypes.ENUM("borrowed", "returned"),
+      type: DataTypes.ENUM("borrowed", "returned", "overdue"),
       defaultValue: "borrowed",
     },
   });
