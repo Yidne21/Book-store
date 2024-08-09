@@ -7,12 +7,14 @@ import bookRoutes from "./routes/bookRoutes.js";
 import rentalRoutes from "./routes/rentalRoutes.js";
 import cors from "cors";
 import * as value from "./config/enviroments.js";
+import { cloudinaryConfig } from "./config/cloudinary.js";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cloudinaryConfig);
 
 // Use routes
 app.use("/api/auth", authRoutes);

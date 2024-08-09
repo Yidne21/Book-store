@@ -1,10 +1,15 @@
 import db from "../models";
+import { uploadFile } from "../utils/cloudinary";
 
 export const createBook = async (req, res) => {
-  const { title, author, category, quantity, rentPrice, coverPhotoUrl } =
-    req.body;
+  const { title, author, category, quantity, rentPrice } = req.body;
+  const imageFile = req.file;
 
   try {
+    let coverPhotoUrl = "";
+    if (imageFile) {
+      coverPhotoUrl = await uploadFile(imageFile);
+    }
     const book = await db.Book.create({
       title,
       author,
@@ -22,8 +27,60 @@ export const createBook = async (req, res) => {
 };
 
 export const filterBooks = async (req, res) => {
+  const {
+    category,
+    author,
+    ownerLocation,
+    ownerName,
+    ownerStatus,
+    bookStatus,
+    ownerId,
+  } = req.query;
+
   try {
-    const books = await db.Book.findAll();
+    // Build the filter criteria for the Book table
+    let bookFilter = {};
+
+    if (category) {
+      bookFilter.category = category;
+    }
+    if (author) {
+      bookFilter.author = author;
+    }
+    if (bookStatus) {
+      bookFilter.status = bookStatus;
+    }
+
+    if (ownerId) {
+      bookFilter.ownerId = ownerId;
+    }
+
+    // Build the filter criteria for the Owner table
+    let ownerFilter = {};
+    if (ownerLocation) {
+      ownerFilter.location = ownerLocation;
+    }
+    if (ownerName) {
+      ownerFilter.name = ownerName;
+    }
+    if (ownerStatus) {
+      ownerFilter.status = ownerStatus;
+    }
+
+    const options = {
+      where: bookFilter,
+      include: [
+        {
+          model: db.User,
+          as: "User",
+          attributes: ["location"],
+          where: ownerFilter,
+        },
+      ],
+    };
+
+    const books = await db.Book.findAll(options);
+
     res.json(books);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -77,15 +134,16 @@ export const myBooks = async (req, res) => {
   }
 };
 
-export const approveBook = async (req, res) => {
+export const updateBookStatus = async (req, res) => {
   const { bookId } = req.params;
+  const { status } = req.body;
 
   try {
     const book = await db.Book.findByPk(bookId);
     if (book) {
-      book.status = "approved";
+      book.status = status;
       await book.save();
-      res.json({ message: "Book approved" });
+      res.json({ message: `Book is ${status}` });
     } else {
       res.status(404).json({ error: "Book not found" });
     }
@@ -94,15 +152,16 @@ export const approveBook = async (req, res) => {
   }
 };
 
-export const rejectBook = async (req, res) => {
+export const uploadCoverPhoto = async (req, res) => {
   const { bookId } = req.params;
+  const { coverPhotoUrl } = req.body;
 
   try {
     const book = await db.Book.findByPk(bookId);
     if (book) {
-      book.status = "unapproved";
+      book.coverPhotoUrl = coverPhotoUrl;
       await book.save();
-      res.json({ message: "Book unapproved" });
+      res.json(book);
     } else {
       res.status(404).json({ error: "Book not found" });
     }
