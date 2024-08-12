@@ -66,34 +66,34 @@ export const sideBarMenu = [
 ];
 
 export const loginFormData = [
-  {
-    label: "Email address",
-    type: "email",
-  },
-  {
-    label: "Password",
-    type: "password",
-  },
+  { id: "email", name: "email", label: "Email", type: "email" },
+  { id: "password", name: "password", label: "Password", type: "password" },
 ];
 
 export const SignUpFormData = [
+  { id: "username", name: "username", label: "Name", type: "text" },
+  { id: "email", name: "email", label: "Email", type: "email" },
   {
-    label: "Email address",
-    type: "email",
-  },
-  {
+    id: "password",
+    name: "password",
     label: "Password",
     type: "password",
   },
   {
-    label: "Confirm password",
+    id: "confirmPassword",
+    name: "confirmPassword",
+    label: "Confirm Password",
     type: "password",
   },
   {
-    label: "Location",
+    id: "location",
+    name: "location",
+    label: "Address",
     type: "text",
   },
   {
+    id: "phone",
+    name: "phone",
     label: "Phone Number",
     type: "number",
   },
