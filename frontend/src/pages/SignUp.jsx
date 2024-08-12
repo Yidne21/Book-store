@@ -1,14 +1,12 @@
 import { Box, Divider, Typography } from "@mui/material";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import ImportContactsOutlinedIcon from '@mui/icons-material/ImportContactsOutlined';
 import SignUpForm from "../components/Forms/SignUpForm";
 
 
 export default function Home() {
   return (
-    <Box>
-      <Box sx={{ height: "100vh", color: "white" }}>
-        {/* Left */}
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", height: "100vh"}}>
+          {/* Left */}
           <Box
             sx={{
               backgroundColor: "#171B36",
@@ -16,48 +14,41 @@ export default function Home() {
               justifyContent: "center",
               alignItems: "center",
               flex: 1,
-              height: "100vh",
             }}
           >
-            <LocalLibraryIcon sx={{ width: 200, height: 200 }} />
+            <ImportContactsOutlinedIcon sx={{ width: 200, height: 200, color: "white" }} />
           </Box>
           {/* Right */}
           <Box
             sx={{
-              color: "black",
               display: "flex",
-              p: 4,
-              flex: 1,
-              height: "100vh",
+              justifyContent: "center",
               alignItems: "center",
-              width: "100%",
-              backgroundColor: "var(--textWhite)",
+              flex: 1,
+              padding: 10,
+              backgroundColor: "white",
             }}
           >
             <Box sx={{ width: "100%" }}>
               <Box
                 sx={{
                   display: "flex",
-                  gap: 1,
-
                   alignItems: "center",
-                  textAlign: "left",
+                  mb: 3,
                 }}
               >
-                <LocalLibraryIcon
-                  sx={{ width: 50, height: 50, color: "#2929ad" }}
+                <ImportContactsOutlinedIcon
+                  sx={{ width: 50, height: 50, color: "#1e3c72" }}
                 />
-                <Typography sx={{ fontSize: 25 }}>Book Rent</Typography>
+                <Typography sx={{ fontSize: 28, fontWeight: "bold", color: "#1e3c72", ml: 1 }}>Book Rent</Typography>
               </Box>
-              <Typography sx={{ mt: 2, fontSize: 20, textAlign: "left" }}>
-                Signup into Book Rent
+              <Typography sx={{ mt: 2, fontSize: 20, color: "#555" }}>
+                Signup as Owner
               </Typography>
-              <Divider variant="fullWidth" sx={{ width: "100%" }} />
+              <Divider variant="fullWidth" sx={{ mb: 3, bgcolor: "#ddd" }} />
               <SignUpForm />
             </Box>
           </Box>
         </Box>
-      </Box>
-    </Box>
   );
 }

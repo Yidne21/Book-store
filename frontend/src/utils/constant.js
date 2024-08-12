@@ -1,56 +1,67 @@
 import React from "react";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import EmailIcon from "@mui/icons-material/Email";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
-import BookIcon from "@mui/icons-material/Book";
-import PersonIcon from "@mui/icons-material/Person";
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
+import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
+import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ApiOutlinedIcon from "@mui/icons-material/ApiOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 export const sideBarMenu = [
   {
     title: "Dashboard",
     path: "/dashboard",
-    icon: <DashboardIcon />,
+    icon: <DashboardOutlinedIcon />,
+    id: "dashboard",
   },
   {
     title: "Dashboard",
-    path: "/dashboard/Owner",
-    icon: <DashboardIcon />,
+    path: "/dashboard/owner",
+    icon: <DashboardOutlinedIcon />,
+    id: "ownerDashboard",
   },
   {
     title: "Books",
     path: "/dashboard/books",
-    icon: <BookIcon />,
+    icon: <ClassOutlinedIcon />,
+    id: "books",
   },
   {
     title: "Owners",
     path: "/dashboard/owners",
-    icon: <PersonIcon />,
+    icon: <PersonOutlineOutlinedIcon />,
+    id: "owners",
   },
   {
     title: "Book Upload",
     path: "/dashboard/bookUpload",
-    icon: <BookIcon />,
+    icon: <BookmarkAddOutlinedIcon />,
+    id: "bookUpload",
   },
   {
     title: "Other",
     path: "/dashboard/other",
-    icon: <EmailIcon />,
+    icon: <ApiOutlinedIcon />,
+    id: "other",
   },
   {
     title: "Notification",
     path: "/dashboard/notification",
-    icon: <NotificationsIcon />,
+    icon: <NotificationsNoneOutlinedIcon />,
+    id: "notification",
   },
   {
     title: "Settings",
     path: "/dashboard/settings",
     icon: <SettingsIcon />,
+    id: "settings",
   },
   {
     title: "Login as",
     path: "/login",
-    icon: <EmailIcon />,
+    icon: <AccountCircleOutlinedIcon />,
+    id: "loginAs",
   },
 ];
 
