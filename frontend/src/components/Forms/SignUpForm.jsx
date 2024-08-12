@@ -7,7 +7,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function SignUpForm() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, }}>
       {SignUpFormData.map((item, index) => (
         <TextField
           key={index}
@@ -15,6 +15,12 @@ function SignUpForm() {
           label={item.label}
           type={item.type}
           variant="outlined"
+          sx={
+            {
+              height: "50px",
+              
+            }
+          }
         />
       ))}
 
@@ -24,11 +30,11 @@ function SignUpForm() {
       </Box>
       <Link to="/login">
         <Button variant="contained" sx={{ width: "100%" }}>
-          SIGN IN
+          SIGN UP
         </Button>
       </Link>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography>Alredy have an account?</Typography>
+        <Typography>Already have an account?</Typography>
         <Link to="/login" style={{ color: "#0f4ec2" }}>
           Login
         </Link>
