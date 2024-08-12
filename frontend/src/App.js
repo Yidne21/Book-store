@@ -1,20 +1,24 @@
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
+  Route,
   Navigate,
 } from "react-router-dom";
 import Signup from "./pages/SignUp";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard/index";
-import AuthGuard from "./components/AuthGuard";
+import AuthGuard from "./components/Auth/AuthGuard";
 import Books from "./pages/BookList";
 import Owners from "./pages/OwnerList";
 import BookUpload from "./pages/BookUpload";
 import AdminDashboard from "./components/Dashboard/Admin";
 import OwnerDashboard from "./components/Dashboard/Owner";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import Unauthorized from "./pages/UnAuthorized";
 
 function App() {
+  const role = localStorage.getItem("role");
+
   return (
     <Router>
       <Routes>
@@ -30,12 +34,52 @@ function App() {
             </AuthGuard>
           }
         >
-          <Route path="" element={<AdminDashboard />} />
-          <Route path="Owner" element={<OwnerDashboard />} />
-          <Route path="books" element={<Books />} />
-          <Route path="owners" element={<Owners />} />
-          <Route path="bookUpload" element={<BookUpload />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute
+                action="read"
+                subject="dashboard"
+                element={
+                  role === "admin" ? <AdminDashboard /> : <OwnerDashboard />
+                }
+              />
+            }
+          />
+
+          <Route
+            path="books"
+            element={
+              <ProtectedRoute
+                action="read"
+                subject="books"
+                element={<Books />}
+              />
+            }
+          />
+          <Route
+            path="owners"
+            element={
+              <ProtectedRoute
+                action="read"
+                subject="owners"
+                element={<Owners />}
+              />
+            }
+          />
+          <Route
+            path="bookUpload"
+            element={
+              <ProtectedRoute
+                action="read"
+                subject="bookUpload"
+                element={<BookUpload />}
+              />
+            }
+          />
         </Route>
+
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Redirect to Dashboard if logged in, otherwise to Signup */}
         <Route
