@@ -4,9 +4,13 @@ import Revenue from "./Revenue";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import React from "react";
 import CustomTable from "../Tables/Table";
-import {AdminLiveBook} from "../Tables/Columuns/AdminLiveBook";
-import { useFilterBooks } from "../../hooks";
+import { AdminLiveBook } from "../Tables/Columuns/AdminLiveBook";
 import { useState } from "react";
+import {
+  useGetCategoryAnalysis,
+  useTotalIncome,
+  useFilterBooks,
+} from "../../hooks";
 
 const AdminDashboard = () => {
   const [filters, setFilters] = useState([]);
@@ -16,29 +20,48 @@ const AdminDashboard = () => {
     ...filters.reduce((acc, filter) => {
       acc[filter.id] = filter.value;
       return acc;
-    }
-    , {})
+    }, {}),
   });
 
-  if (isLoading) {
+  const { data: categoryAnalysis, isLoading: isCategoryAnalyLoading } =
+    useGetCategoryAnalysis();
+
+  const { data: totalIncome, isLoading: isIncomeLoading } = useTotalIncome();
+
+  if (isCategoryAnalyLoading || isIncomeLoading || isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
   }
 
+  const CustomPieData = categoryAnalysis.map((item) => ({
+    value: item.count,
+    label: item.category,
+    color: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
+      Math.random() * 255
+    )}, ${Math.floor(Math.random() * 255)})`,
+  }));
+
+
   if (error) {
     return (
       <Box textAlign="center" mt={2}>
-        <Typography color="error">Error fetching books: {error.message}</Typography>
+        <Typography color="error">
+          Error fetching books: {error.message}
+        </Typography>
       </Box>
     );
   }
 
-  
   return (
-    <Box sx={{ display: "flex", gap: 2 , flex: 1}}>
+    <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
       {/* Left */}
       <Box
         sx={{
@@ -54,7 +77,7 @@ const AdminDashboard = () => {
         <Typography sx={{ fontSize: 14, opacity: 0.6 }}>
           Tue, 14 Nov, 2024, 11:30
         </Typography>
-        <Revenue />
+        <Revenue isdown={false} balance={totalIncome.totalIncome}/>
         <Box
           sx={{
             mt: 3,
@@ -64,17 +87,20 @@ const AdminDashboard = () => {
             boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
           }}
         >
-          <CustomPie />
+          <CustomPie data={CustomPieData} />
         </Box>
       </Box>
 
       {/* Right */}
       <Box sx={{ flex: 3 }}>
-        <CustomTable columns={AdminLiveBook} data={data} maxHeight="300px"
+        <CustomTable
+          columns={AdminLiveBook}
+          data={data}
+          maxHeight="300px"
           title="Live Book status"
           setFilters={setFilters}
           filters={filters}
-          />
+        />
         <Box
           sx={{
             mt: 2,

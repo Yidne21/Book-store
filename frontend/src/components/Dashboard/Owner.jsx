@@ -4,15 +4,48 @@ import Revenue from "./Revenue";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import React from "react";
 import CustomTable from "../Tables/Table";
-import {ownerLiveBook} from "../Tables/Columuns/OwnerLiveBook";
-import { useMyBooks } from "../../hooks";
+import { ownerLiveBook } from "../Tables/Columuns/OwnerLiveBook";
+import {
+  useMyLiveBooksCategoryAnalysis,
+  useMyBooks,
+  useMyBalance,
+} from "../../hooks";
 
 const OwnerDashboard = () => {
   const { data, error, isLoading } = useMyBooks();
+  const { data: balanceData, isLoading: balanceLoading } = useMyBalance();
+  const { data: categoryAnalysisData, isLoading: categoryAnalysisLoading } =
+    useMyLiveBooksCategoryAnalysis();
+
+  if (balanceLoading || categoryAnalysisLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  const CustomPieData = categoryAnalysisData.map((item) => ({
+    value: item.count,
+    label: item.category,
+    color: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
+      Math.random() * 255
+    )}, ${Math.floor(Math.random() * 255)})`,
+  }));
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -21,13 +54,15 @@ const OwnerDashboard = () => {
   if (error) {
     return (
       <Box textAlign="center" mt={2}>
-        <Typography color="error">Error fetching books: {error.message}</Typography>
+        <Typography color="error">
+          Error fetching books: {error.message}
+        </Typography>
       </Box>
     );
   }
-  
+
   return (
-    <Box sx={{ display: "flex", gap: 2}}>
+    <Box sx={{ display: "flex", gap: 2 }}>
       {/* Left */}
       <Box
         sx={{
@@ -43,7 +78,7 @@ const OwnerDashboard = () => {
         <Typography sx={{ fontSize: 14, opacity: 0.6, mb: 5 }}>
           Tue, 14 Nov, 2024, 11:30
         </Typography>
-        <Revenue />
+        <Revenue isdown={false} balance={balanceData.balance} />
         <Box
           sx={{
             mt: 3,
@@ -52,7 +87,7 @@ const OwnerDashboard = () => {
             backgroundColor: "white",
           }}
         >
-          <CustomPie />
+          <CustomPie data={CustomPieData} />
         </Box>
       </Box>
 

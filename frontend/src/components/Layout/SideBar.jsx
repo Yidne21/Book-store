@@ -13,19 +13,18 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ImportContactsOutlinedIcon from '@mui/icons-material/ImportContactsOutlined';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { sideBarMenu } from '../../utils/constant';
 import { defineAbilitiesFor } from '../../abilities/abilities';
 
 const Sidebar = () => {
   const role = localStorage.getItem('role');
   const ability = defineAbilitiesFor(role);
-  const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    navigate('/login');
+    localStorage.clear();
+    sessionStorage.clear(); 
+    window.location.href = '/login';
   };
 
   return (

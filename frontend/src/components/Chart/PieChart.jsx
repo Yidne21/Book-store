@@ -3,18 +3,13 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { Box, Typography, Grid, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 
-const data = [
-  { value: 5, label: 'A', color: '#ad0303' },
-  { value: 10, label: 'B', color: '#06d114' },
-  { value: 15, label: 'C', color: '#0609cc' },
-];
-
 const size = {
   width: 250,
   height: 200,
 };
 
-export default function CustomPie() {
+export default function CustomPie({data}) {
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 3 }}>
       {/* Title Section */}

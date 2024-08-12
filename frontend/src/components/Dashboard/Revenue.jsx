@@ -2,8 +2,10 @@ import { Box, Divider, Typography } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-const Revenue = () => {
-  const down = false;
+const Revenue = ({
+  isdown,
+  balance,
+}) => {
   return (
     <Box
       sx={{
@@ -45,7 +47,7 @@ const Revenue = () => {
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: 24 }}>
-          ETB 9460.00
+          ETB {balance}
         </Typography>
         <Box
           sx={{
@@ -56,18 +58,18 @@ const Revenue = () => {
           }}
         >
           <Box>
-            {down ? (
+            {isdown ? (
               <ArrowDownwardIcon sx={{ color: "red", height: 14, width: 14 }} />
             ) : (
               <ArrowUpwardIcon sx={{ color: "green", height: 14, width: 14 }} />
             )}
           </Box>
-          <Typography variant="body2" sx={down ? {color: "red"}: {color: "green"}}>1.57%</Typography>
+          <Typography variant="body2" sx={isdown ? {color: "red"}: {color: "green"}}>1.57%</Typography>
         </Box>
       </Box>
       <Box>
         <Typography sx={{ fontSize: 12, opacity: 0.8 }}>
-          Compered to ETB 9940 last month
+          Compered to ETB {balance} last month
         </Typography>
         <Box
           sx={{
