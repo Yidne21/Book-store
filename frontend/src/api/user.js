@@ -12,3 +12,8 @@ export const getListOfOwners = async () => {
   const { data } = await axiosInstance.get("/users/owners");
   return data;
 };
+
+export const myBalance = async () => {
+  const { data } = await axiosInstance.get("/users/balance");
+  return data;
+};

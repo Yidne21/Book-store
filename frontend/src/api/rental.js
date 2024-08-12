@@ -9,3 +9,8 @@ export const returnBook = async (rentalId) => {
   const { data } = await axiosInstance.put(`/rentals/return/${rentalId}`);
   return data;
 };
+
+export const totalIncome = async () => {
+  const { data } = await axiosInstance.get("/rentals/totalRevenue");
+  return data;
+};

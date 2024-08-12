@@ -6,11 +6,15 @@ import {
   deleteBook,
   myBooks,
   updateBookStatus,
+  getCategoryAnalysis,
+  getBooksNamesWithIds,
+  myLiveBooksCategoryAnalysis,
+  getCategoriesNames,
 } from "../api/book";
 
 import { signUp, login } from "../api/auth";
-import { rentBook, returnBook } from "../api/rental";
-import { getListOfOwners, updateOwnerStatus } from "../api/user";
+import { rentBook, returnBook, totalIncome } from "../api/rental";
+import { getListOfOwners, updateOwnerStatus, myBalance } from "../api/user";
 
 // Auth Hooks
 export const useLogin = () => {
@@ -81,6 +85,34 @@ export const useUpdateBookStatus = () => {
   });
 };
 
+export const useGetCategoryAnalysis = () => {
+  return useQuery({
+    queryKey: ["categoryAnalysis"],
+    queryFn: getCategoryAnalysis,
+  });
+};
+
+export const useGetBooksNamesWithIds = () => {
+  return useQuery({
+    queryKey: ["booksNames"],
+    queryFn: getBooksNamesWithIds,
+  });
+};
+
+export const useMyLiveBooksCategoryAnalysis = () => {
+  return useQuery({
+    queryKey: ["myLiveBooksCategoryAnalysis"],
+    queryFn: myLiveBooksCategoryAnalysis,
+  });
+};
+
+export const useGetCategoriesNames = () => {
+  return useQuery({
+    queryKey: ["categoriesNames"],
+    queryFn: getCategoriesNames,
+  });
+};
+
 // Rental Hooks
 export const useRentBook = () => {
   const queryClient = useQueryClient();
@@ -104,6 +136,13 @@ export const useReturnBook = () => {
   });
 };
 
+export const useTotalIncome = () => {
+  return useQuery({
+    queryKey: ["totalIncome"],
+    queryFn: totalIncome,
+  });
+};
+
 // User Hooks
 export const useGetListOfOwners = () => {
   return useQuery({
@@ -119,5 +158,12 @@ export const useUpdateOwnerStatus = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["owners"] });
     },
+  });
+};
+
+export const useMyBalance = () => {
+  return useQuery({
+    queryKey: ["balance"],
+    queryFn: myBalance,
   });
 };

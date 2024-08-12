@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "@casl/ability": "^6.7.1",
     "@casl/react": "^4.0.0",
     "@emotion/react": "^11.13.0",
@@ -15,7 +16,6 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@babel/plugin-proposal-private-property-in-object": "^7.16.7",
     "axios": "^1.7.3",
     "dotenv": "^16.4.5",
     "material-react-table": "^2.13.1",
@@ -24,7 +24,7 @@
     "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.0-canary.20240701T200529"
   },
   "scripts": {
     "start": "react-scripts start",

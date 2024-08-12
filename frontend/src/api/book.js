@@ -54,3 +54,23 @@ export const updateBookStatus = async (bookId, status) => {
   });
   return data;
 };
+
+export const getCategoryAnalysis = async () => {
+  const { data } = await axiosInstance.get("/books/category-analysis");
+  return data;
+};
+
+export const getBooksNamesWithIds = async () => {
+  const { data } = await axiosInstance.get("/books/names");
+  return data;
+};
+
+export const myLiveBooksCategoryAnalysis = async () => {
+  const { data } = await axiosInstance.get("/books/owner/category-analysis");
+  return data;
+};
+
+export const getCategoriesNames = async () => {
+  const { data } = await axiosInstance.get("/books/categories");
+  return data;
+};
