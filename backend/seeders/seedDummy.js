@@ -28,7 +28,24 @@ const seedData = async () => {
     const users = [];
     for (let i = 0; i < 10; i++) {
       users.push({
-        username: faker.internet.userName(),
+        username: faker.helpers.arrayElement([
+          "Helen Kebede",
+          "Mekdes Kebede",
+          "Alemayehu Abebe",
+          "Mulugeta Tadesse",
+          "Abebech Gobena",
+          "Alemtsehay Wodajo",
+          "Amarech Sahle",
+          "Antwan Abraha",
+          "Mulugeta Kebede",
+          "Abebe Kebede",
+          "Lidya Kebede",
+          "Mulugeta Kebede",
+          "Abebe Kebede",
+          "Biruk Kebede",
+          "Bisrat Jenbere",
+          "Yidnekachew Kebede",
+        ]),
         email: faker.internet.email(),
         password: "1234",
         location: faker.helpers.arrayElement([
@@ -38,7 +55,19 @@ const seedData = async () => {
           "Gondar",
           "Hawassa",
         ]),
-        phone: faker.phone.number(),
+        phone: faker.helpers.arrayElement([
+          "0912345678",
+          "0912345679",
+          "0912345670",
+          "0912345671",
+          "0912345672",
+          "0912345673",
+          "0912345674",
+          "0912345675",
+          "0912345676",
+          "0912345677",
+          "0912345678",
+        ]),
         status: faker.helpers.arrayElement(["approved", "unapproved"]),
         role: faker.helpers.arrayElement(["customer", "owner"]),
       });
@@ -55,8 +84,33 @@ const seedData = async () => {
       );
       books.push({
         ownerId: randomUser.id,
-        title: faker.lorem.words(3),
-        author: faker.person.firstName(), // 'Antwan'
+        title: faker.helpers.arrayElement([
+          "The Alchemist",
+          "The Da Vinci Code",
+          "The Hobbit",
+          "The Great Gatsby",
+          "The Catcher in the Rye",
+          "The Lord of the Rings",
+          "The Kite Runner",
+          "The Hunger Games",
+          "The Book Thief",
+          "Fikr Eske Mekabir",
+          "Ye Sidet Menged",
+          "Ye Emnet Menged",
+          "Ye Bete Menged",
+        ]),
+        author: faker.helpers.arrayElement([
+          "Abebe Kebede",
+          "Mulugeta Kebede",
+          "Antwan Abraha",
+          "Helen Kebede",
+          "Mekdes Kebede",
+          "Alemayehu Abebe",
+          "Mulugeta Tadesse",
+          "Abebech Gobena",
+          "Alemtsehay Wodajo",
+          "Amarech Sahle",
+        ]), // 'Antwan'
         category: faker.helpers.arrayElement([
           "Fiction",
           "Fantasy",
@@ -95,9 +149,7 @@ const seedData = async () => {
 
     // Add fixed categories into categories table
     const categories = ["Fiction", "Fantasy", "Self-Help", "Business"];
-    const createdCategories = await db.Category.bulkCreate(
-      categories.map((name) => ({ name }))
-    );
+    await db.Category.bulkCreate(categories.map((name) => ({ name })));
 
     console.log("Seeding completed successfully.");
   } catch (error) {

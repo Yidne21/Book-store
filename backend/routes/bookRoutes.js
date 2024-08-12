@@ -6,10 +6,15 @@ import {
   deleteBook,
   myBooks,
   updateBookStatus,
+  listOfBooksGroupedByCategory,
+  getBooksNamesWithIds,
+  getMyLiveBooksGroupedByCategory,
+  getCategoriesNames,
 } from "../controllers/bookController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/caslMiddleware.js";
 import multerUploads from "../middlewares/multer.js";
+import authenticateJwt from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -47,5 +52,14 @@ router.put(
   authorize("unapprove", "Book"),
   updateBookStatus
 );
+
+router.get("/category-analysis", listOfBooksGroupedByCategory);
+router.get("/names", getBooksNamesWithIds);
+router.get(
+  "/owner/category-analysis",
+  authMiddleware,
+  getMyLiveBooksGroupedByCategory
+);
+router.get("/categories", getCategoriesNames);
 
 export default router;

@@ -1,5 +1,9 @@
 import express from "express";
-import { rentBook, returnBook } from "../controllers/rentalController";
+import {
+  rentBook,
+  returnBook,
+  totalIncome,
+} from "../controllers/rentalController";
 import authenticateJwt from "../middlewares/authMiddleware";
 import { authorize } from "../middlewares/caslMiddleware";
 
@@ -18,5 +22,7 @@ router.put(
   authorize("return", "Book"),
   returnBook
 );
+
+router.get("/totalRevenue", totalIncome);
 
 export default router;

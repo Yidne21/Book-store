@@ -74,3 +74,18 @@ export const returnBook = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const totalIncome = async (req, res) => {
+  try {
+    const rentals = await db.Rental.findAll({});
+
+    const totalIncome = rentals.reduce(
+      (acc, rental) => acc + rental.rentPrice,
+      0
+    );
+
+    res.json({ totalIncome });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -2,6 +2,7 @@ import express from "express";
 import {
   getListOfOwners,
   updateOwnerStatus,
+  myBalance,
 } from "../controllers/userController";
 import authenticateJwt from "../middlewares/authMiddleware";
 import { authorize } from "../middlewares/caslMiddleware";
@@ -28,5 +29,7 @@ router.put(
   authorize("disable", "Owner"),
   updateOwnerStatus
 );
+
+router.get("/balance", authenticateJwt, myBalance);
 
 export default router;

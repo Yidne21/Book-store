@@ -68,3 +68,22 @@ export const updateOwnerStatus = async (req, res, next) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const myBalance = async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const user = await db.User.findOne({
+      where: { id },
+      attributes: ["balance"],
+    });
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    next(error);
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};
