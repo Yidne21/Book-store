@@ -98,3 +98,13 @@ export const SignUpFormData = [
     type: "number",
   },
 ];
+
+export const addBookFormData = [
+  { id: "title", name: "title", label: "Title", type: "text" },
+  { id: "author", name: "author", label: "Author", type: "text" },
+];
+
+export const updateBookFormData = [
+  { id: "quantity", name: "quantity", label: "Quantity", type: "number" },
+  { id: "rentPrice", name: "rentPrice", label: "Price", type: "number" },
+];

@@ -1,106 +1,95 @@
 import {
   Box,
   Button,
-  FormControl,
-  TextField,
-  InputLabel,
-  MenuItem,
-  Select,
 } from "@mui/material";
 import { useState } from "react";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { styled } from '@mui/material/styles';
+import UpdateBook from "./UpdateBook";
+import BookSelect from "../Menu/BookSelect";
+import AddBookPopUp from "../Dialog/AddBookPopUp";
+import { useCreateBook } from "../../hooks";
 
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
-
-const UploadBook = () => {
+const UploadBook = ({ books, selectedBookId }) => {
   const [bookId, setBookId] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newBook, setNewBook] = useState({
+    title: "",
+    author: "",
+    category: "",
+    quantity: "",
+    rentPrice: "",
+    file: "",
+  });
+
+  const createBookMutation = useCreateBook();
 
   const handleChange = (event) => {
     setBookId(event.target.value);
   };
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleFormChange = (event, name = null) => {
+    const fieldName = name || event.target.name;
+    const value = event.target.files ? event.target.files[0] : event.target.value;
+    setNewBook((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+  
+  
+
+  const handleAdd = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleSubmit = () => {
+    const { file, ...bookDetails } = newBook;
+    createBookMutation.mutate({ bookDetails, file });
+    setIsDialogOpen(false);
+  };
+
+
   return (
-    <Box sx={
-      {
+    <Box
+      sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-      }
-    }>
-      <Box sx={{ width: 400 }}>
-        <FormControl fullWidth>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={bookId}
-            label="Age"
-            variant="filled"
-            autoComplete="true"
-            onChange={handleChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-            <Button sx={{ width: "100%" }}>Add</Button>
-          </Select>
-        </FormControl>
-      </Box>
-      <Box
-        sx={{
-          mt: 10  ,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          gap: 5,
-        }}
+      }}
+    >
+      <BookSelect
+        books={books}
+        selectedBookId={selectedBookId}
+        bookId={bookId}
+        handleChange={handleChange}
+        handleDialogOpen={handleDialogOpen}
+      />
+      <UpdateBook 
+      book={newBook} onChange={handleFormChange}/>
+      <AddBookPopUp
+        isDialogOpen={isDialogOpen}
+        handleDialogClose={handleDialogClose}
+        newBook={newBook}
+        handleFormChange={handleFormChange}
+        handleFormSubmit={handleAdd}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mt: 5, width: 300, height: 50, borderRadius: 10 }}
+        onClick={handleSubmit}
       >
-        <TextField
-          id="filled-basic"
-          label="Quantity"
-          variant="outlined"
-          type="number"
-          fullWidth
-        />
-        <TextField
-          id="filled-basic"
-          label="Price"
-          variant="outlined"
-          type="number"
-          fullWidth
-        />
-      </Box>
-    <Button
-      component="label"
-      role={undefined}
-      variant="contained"
-      tabIndex={-1}
-      startIcon={<CloudUploadIcon />}
-      sx={{ mt: 5 }}
-    >
-      Upload Book Cover
-      <VisuallyHiddenInput type="file" />
-    </Button>
-
-    <Button
-      variant="contained"
-      color="primary"
-      sx={{ mt: 5, width: 300, height: 50,  borderRadius: 10 }}
-    >
-      Submit
-    </Button>
+        Submit
+      </Button>
     </Box>
   );
 };

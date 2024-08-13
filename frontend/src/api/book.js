@@ -5,7 +5,9 @@ export const createBook = async (bookDetails, file) => {
   const formData = new FormData();
   formData.append("title", bookDetails.title);
   formData.append("author", bookDetails.author);
-  formData.append("publishedDate", bookDetails.publishedDate);
+  formData.append("category", bookDetails.category);
+  formData.append("rentPrice", bookDetails.rentPrice);
+  formData.append("quantity", bookDetails.quantity);
   formData.append("file", file);
 
   const { data } = await axiosInstance.post("/books", formData, {
