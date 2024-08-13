@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, FormControl, TextField, Button, MenuItem } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 
-function BookSelect({ books, selectedBookId, bookId, handleChange, handleDialogOpen }) {
+function BookSelect({ books, selectedBookId, bookId, handleChange, handleDialogOpen, isEdit }) {
   return (
     <Box sx={{ width: 400 }}>
       <FormControl fullWidth variant="filled">
@@ -16,7 +16,7 @@ function BookSelect({ books, selectedBookId, bookId, handleChange, handleDialogO
         />
 
         <MenuItem onClick={handleDialogOpen}>
-          <Button sx={{ width: "100%", mt: 2 }}>Add</Button>
+          <Button sx={{ width: "100%", mt: 2 }}>{isEdit ? "Edit" : "Add"}</Button>
         </MenuItem>
       </FormControl>
     </Box>

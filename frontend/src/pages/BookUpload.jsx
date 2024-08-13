@@ -2,11 +2,10 @@ import React from 'react'
 import UploadBook from "../components/Forms/UploadBook";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { useGetBooksNamesWithIds, } from '../hooks';
-import { useParams } from 'react-router-dom';
+
+
 
 export default function BookUpload() {
-  const { bookId } = useParams();
-
   const { data: books, error, isLoading  } = useGetBooksNamesWithIds();
 
   if (isLoading) {
@@ -43,7 +42,7 @@ export default function BookUpload() {
           mb: 2,
         }
       }>Upload New Book</Typography>
-      <UploadBook books={books} selecedBookId={bookId} />
+      <UploadBook books={books}/>
     </Box>
   );
 }

@@ -1,5 +1,4 @@
 import { Box, Switch } from "@mui/material";
-import { MRT_ColumnDef } from "material-react-table";
 import DoneIcon from "@mui/icons-material/Done";
 
 
@@ -22,13 +21,6 @@ export const AdminBook = [
     size: 150,
     Cell: ({ renderedCellValue }) => (
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        {/* <Image
-          src="/woman.png"
-          alt="woman"
-          width={24}
-          height={24}
-          style={{ borderRadius: "50%", border: "1px solid grey" }}
-        /> */}
         <Box>{renderedCellValue}</Box>
       </Box>
     ),

@@ -10,6 +10,7 @@ import {
   getBooksNamesWithIds,
   myLiveBooksCategoryAnalysis,
   getCategoriesNames,
+  getBookById,
 } from "../api/book";
 
 import { signUp, login } from "../api/auth";
@@ -44,6 +45,13 @@ export const useFilterBooks = (filters) => {
   return useQuery({
     queryKey: ["books", filters],
     queryFn: () => filterBooks(filters),
+  });
+};
+
+export const useGetBookById = (bookId) => {
+  return useQuery({
+    queryKey: ["book", bookId],
+    queryFn: () => getBookById(bookId),
   });
 };
 

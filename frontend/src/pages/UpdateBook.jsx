@@ -1,0 +1,136 @@
+import React, { useState, useEffect } from "react";
+import { Box, Typography, CircularProgress, Button } from "@mui/material";
+import { useGetBookById, useUpdateBook } from "../hooks";
+import { useParams } from "react-router-dom";
+import BookSelect from "../components/Menu/BookSelect";
+import UpdateBookForm from "../components/Forms/UpdateBookForm";
+import AddBookPopUp from "../components/Dialog/AddBookPopUp";
+
+export default function UpdateBook() {
+  const { bookId } = useParams();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { data: book, error, isLoading } = useGetBookById(bookId);
+  const [updatedBook, setUpdatedBook] = useState({
+    title: "",
+    author: "",
+    category: "",
+    quantity: "",
+    rentPrice: "",
+    file: "",
+  });
+
+  useEffect(() => {
+    if (book) {
+      setUpdatedBook({
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        quantity: book.quantity,
+        rentPrice: book.rentPrice,
+        file: "",
+      });
+    }
+  }, [book]);
+
+  const updateBookMutation = useUpdateBook();
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleAdd = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handleFormChange = (event, name = null) => {
+    const fieldName = name || event.target.name;
+    const value = event.target.files
+      ? event.target.files[0]
+      : event.target.value;
+    setUpdatedBook((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    console.log("Updated Book:", updatedBook);
+    const { file, ...updatedDetails } = updatedBook;
+    updateBookMutation.mutate({ bookId, updatedDetails, file });
+    setIsDialogOpen(false);
+  };
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box textAlign="center" mt={2}>
+        <Typography color="error">
+          Error fetching book: {error.message}
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+        height: "100%",
+        p: 4,
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: 24,
+          mb: 2,
+        }}
+      >
+        Update Book
+      </Typography>
+      <BookSelect
+        books={[book]}
+        selectedBookId={bookId}
+        bookId={bookId}
+        isEdit={true}
+        handleDialogOpen={handleDialogOpen}
+      />
+      <UpdateBookForm book={updatedBook} onChange={handleFormChange} />
+      <AddBookPopUp
+        isDialogOpen={isDialogOpen}
+        handleDialogClose={handleDialogClose}
+        newBook={updatedBook}
+        handleFormChange={handleFormChange}
+        handleFormSubmit={handleAdd}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ mt: 5, width: 300, height: 50, borderRadius: 10 }}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
+    </Box>
+  );
+}
