@@ -9,12 +9,18 @@ import * as value from "../config/enviroments.js";
 dotenv.config();
 console.log(value.db_name);
 
-const sequelize = new Sequelize(
-  value.db_name,
-  value.db_user,
-  value.db_password,
-  {
-    host: value.db_host,
+// const sequelize = new Sequelize(
+//   value.db_name,
+//   value.db_user,
+//   value.db_password,
+//   {
+//     host: value.db_host,
+//     dialect: "postgres",
+//     logging: false,
+//   }
+// );
+
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
     logging: false,
   }
