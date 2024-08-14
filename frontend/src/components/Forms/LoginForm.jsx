@@ -5,8 +5,12 @@ import { useLogin } from "../../hooks";
 import { loginFormData } from "../../utils/constant";
 import { loginSchema } from '../../utils/validation'; // Import your Zod schema
 import { defineAbilitiesFor } from '../../abilities/abilities';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [formErrors, setFormErrors] = useState({});
   const [error, setError] = useState(null);
@@ -38,7 +42,7 @@ const LoginForm = () => {
         localStorage.setItem("role", data.role);
         defineAbilitiesFor(data.role);
 
-        window.location.href = '/dashboard';
+       navigate('/dashboard');
       },
       onError: (error) => {
         setError(error.response.data.error);
