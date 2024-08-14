@@ -7,8 +7,6 @@ import dotenv from "dotenv";
 import * as value from "../config/enviroments.js";
 
 dotenv.config();
-console.log(value.db_name);
-
 // const sequelize = new Sequelize(
 //   value.db_name,
 //   value.db_user,
@@ -21,10 +19,9 @@ console.log(value.db_name);
 // );
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: "postgres",
-    logging: false,
-  }
-);
+  dialect: "postgres",
+  logging: false,
+});
 
 const db = {};
 db.Sequelize = Sequelize;
