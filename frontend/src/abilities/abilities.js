@@ -10,7 +10,7 @@ export function defineAbilitiesFor(role) {
     can("read", "owners");
     can("read", "other");
   } else if (role === "owner") {
-    can("read", "dashboard");
+    can("read", "ownerDashboard");
     can("read", "bookUpload");
     can("read", "other");
   }

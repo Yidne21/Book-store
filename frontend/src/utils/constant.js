@@ -11,7 +11,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 export const sideBarMenu = [
   {
     title: "Dashboard",
-    path: "/dashboard",
+    path: "/dashboard/admin",
     icon: <DashboardOutlinedIcon />,
     id: "dashboard",
   },
@@ -41,19 +41,19 @@ export const sideBarMenu = [
   },
   {
     title: "Other",
-    path: "/dashboard/other",
+    // path: "/dashboard/other",
     icon: <ApiOutlinedIcon />,
     id: "other",
   },
   {
     title: "Notification",
-    path: "/dashboard/notification",
+    // path: "/dashboard/notification",
     icon: <NotificationsNoneOutlinedIcon />,
     id: "notification",
   },
   {
     title: "Settings",
-    path: "/dashboard/settings",
+    // path: "/dashboard/settings",
     icon: <SettingsIcon />,
     id: "settings",
   },

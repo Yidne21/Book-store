@@ -19,7 +19,6 @@ import UpdateBook from "./pages/UpdateBook";
 
 function App() {
   const role = localStorage.getItem("role");
-
   return (
     <Router>
       <Routes>
@@ -36,14 +35,23 @@ function App() {
           }
         >
           <Route
-            index
+            path="admin"
             element={
               <ProtectedRoute
                 action="read"
                 subject="dashboard"
-                element={
-                  role === "admin" ? <AdminDashboard /> : <OwnerDashboard />
-                }
+                element={<AdminDashboard />}
+              />
+            }
+          />
+
+          <Route
+            path="owner"
+            element={
+              <ProtectedRoute
+                action="read"
+                subject="ownerDashboard"
+                element={<OwnerDashboard />}
               />
             }
           />
@@ -88,7 +96,9 @@ function App() {
           path="*"
           element={
             <Navigate
-              to={localStorage.getItem("token") ? "/dashboard" : "/signup"}
+              to={
+                localStorage.getItem("token") ? `/dashboard/${role}` : "/signup"
+              }
             />
           }
         />
