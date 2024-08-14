@@ -2,7 +2,7 @@ import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
 import AddBook from '../Forms/AddBook'
 
-function AddBookPopUp({ isDialogOpen, handleDialogClose, newBook, handleFormChange, handleFormSubmit }) {
+function AddBookPopUp({ isDialogOpen, handleDialogClose, newBook, handleFormChange, handleFormSubmit, isEdit }) {
   return (
     <Dialog
     open={isDialogOpen}

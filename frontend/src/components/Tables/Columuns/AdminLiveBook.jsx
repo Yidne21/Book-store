@@ -32,13 +32,6 @@ export const AdminLiveBook =
       size: 140,
       Cell: ({ renderedCellValue }) => (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          {/* <Image
-            src="/woman.png"
-            alt="woman"
-            width={24}
-            height={24}
-            style={{ borderRadius: "50%", border: "1px solid grey" }}
-          /> */}
           <Box>{renderedCellValue}</Box>
         </Box>
       ),
@@ -47,25 +40,25 @@ export const AdminLiveBook =
       accessorKey: "status",
       header: "Status",
       size: 100,
-      Cell: ({ renderedCellValue }) => (
+      Cell: ({ row }) => (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
             sx={{
               p: 0.3,
               borderRadius: "50%",
-              border: "1px solid red",
+              border: `1px solid ${row.original.availableQuantity > 0 ? "green" : "red"}`,
             }}
           >
             <Box
               sx={{
                 width: 10,
                 height: 10,
-                backgroundColor: "red",
+                backgroundColor: `${row.original.availableQuantity > 0 ? "green" : "red"}`,
                 borderRadius: "50%",
               }}
             />
           </Box>
-          <Box>{renderedCellValue}</Box>
+          <Box>{row.original.availableQuantity === 0 ? "Unavailable" : "Available"}</Box>
         </Box>
       ),
     },

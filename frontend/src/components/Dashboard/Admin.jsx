@@ -17,6 +17,7 @@ const AdminDashboard = () => {
 
   const { data, error, isLoading } = useFilterBooks({
     bookStatus: "approved",
+    ownerStatus: "approved",
     ...filters.reduce((acc, filter) => {
       acc[filter.id] = filter.value;
       return acc;

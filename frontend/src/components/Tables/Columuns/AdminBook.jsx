@@ -1,6 +1,7 @@
 import { Box, Switch } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-
+import { useUpdateBookStatus } from "../../../hooks";
+import React from "react";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -39,24 +40,51 @@ export const AdminBook = [
     accessorKey: "status",
     header: "Status",
     size: 150,
+    Cell: ({ row }) => {
+      const { id, status } = row.original;
+      const mutation = useUpdateBookStatus();
 
-    Cell: ({ renderedCellValue }) => (
-      <Box
-        sx={{
-          backgroundColor: "#E6F3E6",
-          py: 0.1,
-          px: 1,
-          gap: 0.5,
-          borderRadius: "10%",
-          display: "flex",
-          alignItems: "center",
-          color: "#14a514",
-        }}
-      >
-        <DoneIcon sx={{ fontSize: 18 }} />
-        {renderedCellValue}
-        <Switch {...label} size="medium" color="success" />
-      </Box>
-    ),
+      const isApproved = status === "approved";
+
+      const handleSwitchChange = (event) => {
+        const newStatus = event.target.checked ? "approved" : "unapproved";
+        mutation.mutate(
+          { bookId: id, status: newStatus },
+          {
+            onSuccess: () => {
+              console.log(`Book status updated to ${newStatus}`);
+            },
+            onError: (error) => {
+              console.error("Error updating book status:", error);
+            },
+          }
+        );
+      };
+
+      return (
+        <Box
+          sx={{
+            backgroundColor: isApproved ? "#E6F3E6" : "#F3E6E6",
+            py: 0.1,
+            px: 1,
+            gap: 0.5,
+            borderRadius: "10%",
+            display: "flex",
+            alignItems: "center",
+            color: isApproved ? "#14a514" : "#a51414",
+          }}
+        >
+          <DoneIcon sx={{ fontSize: 18 }} />
+          {isApproved ? "approved" : "unapproved"}
+          <Switch
+            {...label}
+            size="medium"
+            color="success"
+            checked={isApproved}
+            onChange={handleSwitchChange}
+          />
+        </Box>
+      );
+    },
   },
 ];

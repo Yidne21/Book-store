@@ -18,25 +18,30 @@ export const createBook = async (bookDetails, file) => {
   return data;
 };
 
-export const filterBooks = async (filters) => {
-  const { data } = await axiosInstance.get("/books", { params: filters });
-  return data;
-};
-
 export const updateBook = async (bookId, updatedDetails, file) => {
   const formData = new FormData();
   formData.append("title", updatedDetails.title);
   formData.append("author", updatedDetails.author);
-  formData.append("publishedDate", updatedDetails.publishedDate);
-  if (file) {
-    formData.append("file", file);
-  }
+  formData.append("category", updatedDetails.category);
+  formData.append("rentPrice", updatedDetails.rentPrice);
+  formData.append("quantity", updatedDetails.quantity);
+  formData.append("file", file);
 
   const { data } = await axiosInstance.put(`/books/${bookId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+  return data;
+};
+
+export const filterBooks = async (filters) => {
+  const { data } = await axiosInstance.get("/books", { params: filters });
+  return data;
+};
+
+export const getBookById = async (bookId) => {
+  const { data } = await axiosInstance.get(`/books/${bookId}`);
   return data;
 };
 
@@ -51,7 +56,7 @@ export const myBooks = async () => {
 };
 
 export const updateBookStatus = async (bookId, status) => {
-  const { data } = await axiosInstance.put(`/books/${bookId}/status`, {
+  const { data } = await axiosInstance.put(`/books/approve/${bookId}`, {
     status,
   });
   return data;

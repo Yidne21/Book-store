@@ -1,8 +1,12 @@
-import { Box, Button, Switch } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Box,
+  Switch,
+} from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-
+import React, { useState } from "react";
+import { useUpdateOwnerStatus } from "../../../hooks";
+import OwnerDetail from "../../Dialog/OwnerDetail";
+import AdminOwnerAction from "../../Button/AdminOwnerAction";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -13,20 +17,12 @@ export const adminOwner = [
     size: 40,
     Cell: ({ row }) => <span>{row.index + 1}</span>,
   },
-
   {
     accessorKey: "username",
     header: "Owner",
     size: 150,
     Cell: ({ renderedCellValue }) => (
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        {/* <Image
-          src="/woman.png"
-          alt="woman"
-          width={24}
-          height={24}
-          style={{ borderRadius: "50%", border: "1px solid grey" }}
-        /> */}
         <Box>{renderedCellValue}</Box>
       </Box>
     ),
@@ -41,47 +37,81 @@ export const adminOwner = [
     header: "Location",
     size: 200,
   },
-
   {
     accessorKey: "status",
     header: "Status",
     size: 150,
+    Cell: ({ row }) => {
+      const { status } = row.original;
+      const isApproved = status === "approved";
 
-    Cell: ({ renderedCellValue }) => (
-      <Box
-        sx={{
-          backgroundColor: "#E6F3E6",
-          py: 0.1,
-          px: 1,
-          gap: 0.5,
-          borderRadius: "10%",
-          display: "flex",
-          alignItems: "center",
-          color: "#14a514",
-        }}
-      >
-        <DoneIcon sx={{ fontSize: 18 }} />
-        {renderedCellValue}
-        <Switch {...label} size="medium" color="success" />
-      </Box>
-    ),
+      return (
+        <Box
+          sx={{
+            backgroundColor: isApproved ? "#E6F3E6" : "#F3E6E6",
+            py: 0.1,
+            px: 1,
+            gap: 0.5,
+            borderRadius: "10%",
+            display: "flex",
+            alignItems: "center",
+            color: isApproved ? "#14a514" : "#a51414",
+          }}
+        >
+          <DoneIcon sx={{ fontSize: 18 }} />
+          {isApproved ? "approved" : "unapproved"}
+          <Switch
+            {...label}
+            size="medium"
+            color="success"
+            checked={isApproved}
+            onChange={() => {}}
+            disabled
+          />
+        </Box>
+      );
+    },
   },
-
   {
     accessorKey: "action",
-    header: "Action ",
+    header: "Action",
     size: 200,
-    Cell: () => (
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-          <VisibilityIcon />
-          <DeleteIcon sx={{ color: "red" }} />
-        </Box>
+    Cell: ({ row }) => {
+      const { id, status } = row.original;
+      const mutation = useUpdateOwnerStatus();
+      const [open, setOpen] = useState(false);
 
-        <Button variant="contained" size="small">
-          Contained
-        </Button>
-      </Box>
-    ),
+      const isApproved = status === "approved";
+
+      const handleView = () => {
+        setOpen(true);
+      };
+
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+      const handleDelete = () => {
+        console.log(`Deleting owner with id: ${id}`);
+        // Your delete logic here
+      };
+
+      const handleApprove = () => {
+        const newStatus = isApproved ? "unapproved" : "approved";
+        mutation.mutate({ ownerId: id, status: newStatus });
+      };
+
+      return (
+        <>
+          <AdminOwnerAction
+            handleView={handleView}
+            handleDelete={handleDelete}
+            handleApprove={handleApprove}
+            isApproved={isApproved}
+          />
+          <OwnerDetail open={open} handleClose={handleClose} row={row} />
+        </>
+      );
+    },
   },
 ];

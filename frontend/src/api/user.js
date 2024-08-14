@@ -1,10 +1,9 @@
 import axiosInstance from "./axiosInstance";
 
-export const updateOwnerStatus = async (ownerStatus) => {
-  const { data } = await axiosInstance.put(
-    "/user/update-owner-status",
-    ownerStatus
-  );
+export const updateOwnerStatus = async (ownerId, status) => {
+  const { data } = await axiosInstance.put(`/users/approve/${ownerId}`, {
+    status,
+  });
   return data;
 };
 

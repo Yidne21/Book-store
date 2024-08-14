@@ -15,6 +15,7 @@ import AdminDashboard from "./components/Dashboard/Admin";
 import OwnerDashboard from "./components/Dashboard/Owner";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Unauthorized from "./pages/UnAuthorized";
+import UpdateBook from "./pages/UpdateBook";
 
 function App() {
   const role = localStorage.getItem("role");
@@ -57,6 +58,7 @@ function App() {
               />
             }
           />
+          <Route path="books/:bookId" element={<UpdateBook />} />
           <Route
             path="owners"
             element={
