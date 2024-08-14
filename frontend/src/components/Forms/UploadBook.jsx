@@ -2,15 +2,17 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdateBook from "./UpdateBook";
 import BookSelect from "../Menu/BookSelect";
 import AddBookPopUp from "../Dialog/AddBookPopUp";
 import { useCreateBook } from "../../hooks";
+import Success from "../Dialog/Success";
 
 const UploadBook = ({ books, selectedBookId }) => {
   const [bookId, setBookId] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [newBook, setNewBook] = useState({
     title: "",
     author: "",
@@ -25,6 +27,15 @@ const UploadBook = ({ books, selectedBookId }) => {
   const handleChange = (event) => {
     setBookId(event.target.value);
   };
+
+  const handleSuccessClose = () => {
+    setIsSuccess(false);
+  };
+
+  const handleSuccessOpen = () => {
+    setIsSuccess(true);
+  };
+
 
   const handleDialogOpen = () => {
     setIsDialogOpen(true);
@@ -55,6 +66,13 @@ const UploadBook = ({ books, selectedBookId }) => {
     setIsDialogOpen(false);
   };
 
+  useEffect(() => {
+    if (createBookMutation.isSuccess) {
+      handleSuccessOpen();
+    }
+  }
+  , [createBookMutation.isSuccess]);
+
 
   return (
     <Box
@@ -82,13 +100,19 @@ const UploadBook = ({ books, selectedBookId }) => {
         handleFormChange={handleFormChange}
         handleFormSubmit={handleAdd}
       />
+      <Success
+        isDialogOpen={isSuccess}
+        handleDialogClose={handleSuccessClose}
+        message="You have uploaded book successfully. Wait until we approve it."
+      />
       <Button
         variant="contained"
         color="primary"
         sx={{ mt: 5, width: 300, height: 50, borderRadius: 10 }}
         onClick={handleSubmit}
+        disabled={createBookMutation.isLoading}
       >
-        Submit
+       {createBookMutation.isLoading ? "Uploading..." : "Submit"}
       </Button>
     </Box>
   );

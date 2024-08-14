@@ -42,7 +42,12 @@ const LoginForm = () => {
         localStorage.setItem("role", data.role);
         defineAbilitiesFor(data.role);
 
-       navigate('/dashboard');
+        if (data.role === 'admin') {
+          navigate('/dashboard/admin');
+        }
+        if (data.role === 'owner') {
+          navigate('/dashboard/owner');
+        }
       },
       onError: (error) => {
         setError(error.response.data.error);
@@ -77,7 +82,7 @@ const LoginForm = () => {
         <Typography>Remember me</Typography>
       </Box>
       <Button variant="contained" sx={{ width: "100%" }} onClick={handleLogin} disabled={loginMutation.isLoading}>
-        {loginMutation.isLoading ? 'Logging in...' : 'LOGIN'}
+        LOGIN
       </Button>
 
       <Box sx={{ display: "flex", justifyContent: "center" }}>

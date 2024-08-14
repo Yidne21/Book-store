@@ -17,7 +17,6 @@ function CustomTable({
     columns,
     data,
     enableColumnActions: false,
-    enableSorting: false,
     enablePagination: false,
     enableTableFooter: false,
     enableStickyFooter: false,

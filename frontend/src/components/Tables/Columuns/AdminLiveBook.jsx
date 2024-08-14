@@ -39,7 +39,7 @@ export const AdminLiveBook =
     {
       accessorKey: "status",
       header: "Status",
-      size: 100,
+      size: 40,
       Cell: ({ row }) => (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Box
@@ -66,5 +66,10 @@ export const AdminLiveBook =
       accessorKey: "rentPrice",
       header: "Price",
       size: 20,
+      Cell: ({ renderedCellValue }) => (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box>{renderedCellValue.toFixed(2)} Birr</Box>
+        </Box>
+      ),
     },
   ];

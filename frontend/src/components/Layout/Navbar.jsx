@@ -5,7 +5,15 @@ import React from "react";
 const Navbar = () => {
   const location = useLocation();
   const role = localStorage.getItem("role");
-  const pathname = location.pathname;
+  let pathname = location.pathname;
+  const roleMap = {
+    "/dashboard/admin": "/dashboard",
+    "/dashboard/owner": "/dashboard",
+  };
+
+  if (roleMap[pathname]) {
+    pathname = roleMap[pathname];
+  }
   return (
     <Box
       sx={{

@@ -47,7 +47,7 @@ const Revenue = ({
         }}
       >
         <Typography sx={{ fontWeight: 800, fontSize: 24 }}>
-          ETB {balance}
+          ETB {balance.toFixed(2)}
         </Typography>
         <Box
           sx={{

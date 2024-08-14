@@ -68,6 +68,11 @@ export const ownerLiveBook = [
     accessorKey: "rentPrice",
     header: "Price",
     size: 40,
+    Cell: ({ renderedCellValue }) => (
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box>{renderedCellValue.toFixed(2)} Birr</Box>
+      </Box>
+    ),
   },
   {
     accessorKey: "action",

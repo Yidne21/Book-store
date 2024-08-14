@@ -5,10 +5,13 @@ import { useParams } from "react-router-dom";
 import BookSelect from "../components/Menu/BookSelect";
 import UpdateBookForm from "../components/Forms/UpdateBookForm";
 import AddBookPopUp from "../components/Dialog/AddBookPopUp";
+import Success from "../components/Dialog/Success";
 
 export default function UpdateBook() {
   const { bookId } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
 
   const { data: book, error, isLoading } = useGetBookById(bookId);
   const [updatedBook, setUpdatedBook] = useState({
@@ -46,6 +49,21 @@ export default function UpdateBook() {
   const handleAdd = () => {
     setIsDialogOpen(false);
   };
+
+  const handleSuccessClose = () => {
+    setIsSuccess(false);
+  };
+
+  const handleSuccessOpen = () => {
+    setIsSuccess(true);
+  };
+
+  useEffect(() => {
+    if (updateBookMutation.isSuccess) {
+      handleSuccessOpen();
+    }
+  }
+  , [updateBookMutation.isSuccess]);
 
   const handleFormChange = (event, name = null) => {
     const fieldName = name || event.target.name;
@@ -122,6 +140,11 @@ export default function UpdateBook() {
         newBook={updatedBook}
         handleFormChange={handleFormChange}
         handleFormSubmit={handleAdd}
+      />
+            <Success
+        isDialogOpen={isSuccess}
+        handleDialogClose={handleSuccessClose}
+        message="You have updated The book successfully."
       />
       <Button
         variant="contained"
