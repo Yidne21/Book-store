@@ -144,9 +144,6 @@ export const myBooks = async (req, res) => {
     const books = await db.Book.findAll({
       where: {
         ownerId: id,
-        status: {
-          [Op.not]: "unapproved",
-        },
       },
     });
     res.json(books);
