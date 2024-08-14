@@ -16,15 +16,17 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Link } from 'react-router-dom';
 import { sideBarMenu } from '../../utils/constant';
 import { defineAbilitiesFor } from '../../abilities/abilities';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const role = localStorage.getItem('role');
   const ability = defineAbilitiesFor(role);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.clear();
     sessionStorage.clear(); 
-    window.location.href = '/login';
+    navigate('/login');
   };
 
   return (
