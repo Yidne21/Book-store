@@ -47,7 +47,7 @@ const seedData = async () => {
           "Yidnekachew Kebede",
         ]),
         email: faker.internet.email(),
-        password: "1234",
+        password: "123456",
         location: faker.helpers.arrayElement([
           "Addis Ababa",
           "Dire Dawa",

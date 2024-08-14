@@ -10,6 +10,7 @@ import {
   getBooksNamesWithIds,
   getMyLiveBooksGroupedByCategory,
   getCategoriesNames,
+  getBookById,
 } from "../controllers/bookController.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { authorize } from "../middlewares/caslMiddleware.js";
@@ -54,12 +55,13 @@ router.put(
 );
 
 router.get("/category-analysis", listOfBooksGroupedByCategory);
-router.get("/names", getBooksNamesWithIds);
+router.get("/names", authMiddleware, getBooksNamesWithIds);
 router.get(
   "/owner/category-analysis",
   authMiddleware,
   getMyLiveBooksGroupedByCategory
 );
 router.get("/categories", getCategoriesNames);
+router.get("/:bookId", getBookById);
 
 export default router;

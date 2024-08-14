@@ -71,7 +71,7 @@ export const filterBooks = async (req, res) => {
       };
     }
     if (ownerStatus) {
-      ownerFilter.status = ownerStatus;
+      ownerFilter.status = "approved";
     }
 
     const options = {
@@ -144,7 +144,9 @@ export const myBooks = async (req, res) => {
     const books = await db.Book.findAll({
       where: {
         ownerId: id,
-        status: "approved",
+        status: {
+          [Op.not]: "unapproved",
+        },
       },
     });
     res.json(books);
@@ -175,7 +177,9 @@ export const listOfBooksGroupedByCategory = async (req, res) => {
   try {
     const books = await db.Book.findAll({
       where: {
-        status: "approved",
+        status: {
+          [db.Sequelize.Op.ne]: "unapproved",
+        },
       },
       include: [
         {
@@ -184,11 +188,11 @@ export const listOfBooksGroupedByCategory = async (req, res) => {
           where: {
             status: "approved",
           },
-          attributes: ["username"],
+          attributes: [],
         },
       ],
       attributes: ["category", [db.sequelize.fn("COUNT", "category"), "count"]],
-      group: ["category", "User.id"],
+      group: ["category"],
     });
     res.json(books);
   } catch (error) {
@@ -240,9 +244,10 @@ export const getMyLiveBooksGroupedByCategory = async (req, res) => {
     const books = await db.Book.findAll({
       where: {
         ownerId: id,
-        status: "approved",
+        status: {
+          [Op.not]: "unapproved",
+        },
       },
-
       attributes: ["category", [db.sequelize.fn("COUNT", "category"), "count"]],
       group: ["category"],
     });
@@ -256,11 +261,25 @@ export const getCategoriesNames = async (req, res) => {
   try {
     const categories = await db.Category.findAll(
       {
-        attributes: ["name"],
+        attributes: ["name", "id"],
       },
       { raw: true }
     );
     res.json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getBookById = async (req, res) => {
+  const { bookId } = req.params;
+  try {
+    const book = await db.Book.findByPk(bookId);
+    if (book) {
+      res.json(book);
+    } else {
+      res.status(404).json({ error: "Book not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
