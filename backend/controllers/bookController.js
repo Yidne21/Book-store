@@ -33,8 +33,8 @@ export const filterBooks = async (req, res) => {
     author,
     ownerLocation,
     ownerName,
-    ownerStatus,
-    bookStatus,
+    ownerStatus = "approved",
+    bookStatus = "approved",
     ownerId,
   } = req.query;
 
@@ -72,7 +72,7 @@ export const filterBooks = async (req, res) => {
       };
     }
     if (ownerStatus) {
-      ownerFilter.status = "approved";
+      ownerFilter.status = ownerStatus;
     }
 
     const options = {
