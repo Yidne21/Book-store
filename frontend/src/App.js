@@ -18,6 +18,8 @@ import Unauthorized from "./pages/UnAuthorized";
 import UpdateBook from "./pages/UpdateBook";
 
 function App() {
+  const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
   return (
     <Router>
       <Routes>
@@ -90,9 +92,7 @@ function App() {
         <Route
           path="*"
           element={
-            <Navigate
-              to={localStorage.getItem("token") ? `/dashboard` : "/signup"}
-            />
+            <Navigate to={token && role ? `/dashboard/${role}` : "/signup"} />
           }
         />
         <Route path="/unauthorized" element={<Unauthorized />} />
