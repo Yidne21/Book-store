@@ -105,6 +105,6 @@ export const addBookFormData = [
 ];
 
 export const updateBookFormData = [
-  { id: "quantity", name: "quantity", label: "Quantity", type: "number" },
-  { id: "rentPrice", name: "rentPrice", label: "Price", type: "number" },
+  { id: "quantity", name: "quantity", label: "Quantity", type: "text" },
+  { id: "rentPrice", name: "rentPrice", label: "Price", type: "text" },
 ];

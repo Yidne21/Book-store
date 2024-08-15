@@ -4,7 +4,7 @@ import { updateBookFormData } from "../../utils/constant";
 import CoverPhotoUpload from "../Button/CoverPhotoUpload";
 
 
-function UpdateBookForm({ book, onChange }) {
+function UpdateBookForm({ book, onChange, formErrors }) {
   return (
     <Box 
     sx={{
@@ -36,6 +36,8 @@ function UpdateBookForm({ book, onChange }) {
             variant="outlined"
             size="small"
             fullWidth
+            error={!!formErrors[data.name]} 
+            helperText={formErrors[data.name]}
           />
         ))}
       </Box>

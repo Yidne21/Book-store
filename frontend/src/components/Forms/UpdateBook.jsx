@@ -3,7 +3,8 @@ import { Box, TextField } from "@mui/material";
 import CoverPhotoUpload from "../Button/CoverPhotoUpload";
 import { updateBookFormData } from "../../utils/constant";
 
-function UpdateBook({ book, onChange }) {
+
+function UpdateBook({ book, onChange, formErrors }) {
   return (
     <Box 
     sx={{
@@ -23,9 +24,9 @@ function UpdateBook({ book, onChange }) {
           gap: 5,
         }}
       >
-        {updateBookFormData.map((data) => (
+        {updateBookFormData.map((data, index) => (
           <TextField
-            key={data.id}
+            key={index}
             id={data.id}
             name={data.name}
             value={book[data.name]}
@@ -35,6 +36,8 @@ function UpdateBook({ book, onChange }) {
             variant="outlined"
             size="small"
             fullWidth
+            error={!!formErrors[data.name]} 
+            helperText={formErrors[data.name]}
           />
         ))}
       </Box>

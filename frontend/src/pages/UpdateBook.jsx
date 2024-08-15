@@ -6,12 +6,15 @@ import BookSelect from "../components/Menu/BookSelect";
 import UpdateBookForm from "../components/Forms/UpdateBookForm";
 import AddBookPopUp from "../components/Dialog/AddBookPopUp";
 import Success from "../components/Dialog/Success";
+import { updateBookSchema } from "../utils/validation";
 
 export default function UpdateBook() {
   const { bookId } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+
 
 
   const { data: book, error, isLoading } = useGetBookById(bookId);
@@ -78,7 +81,17 @@ export default function UpdateBook() {
   };
 
   const handleSubmit = () => {
+    const result = updateBookSchema.safeParse(updatedBook);
     setIsUpdating(true);
+    if (!result.success) {
+      const errors = result.error.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+      setFormErrors(errors);
+      setIsUpdating(false);
+      return;
+    }
     const { file, ...updatedDetails } = updatedBook;
     updateBookMutation.mutate({ bookId, updatedDetails, file }, {
       onSuccess: () => {
@@ -141,15 +154,16 @@ export default function UpdateBook() {
         isEdit={true}
         handleDialogOpen={handleDialogOpen}
       />
-      <UpdateBookForm book={updatedBook} onChange={handleFormChange} />
+      <UpdateBookForm book={updatedBook} onChange={handleFormChange} formErrors={formErrors}/>
       <AddBookPopUp
         isDialogOpen={isDialogOpen}
         handleDialogClose={handleDialogClose}
         newBook={updatedBook}
         handleFormChange={handleFormChange}
         handleFormSubmit={handleAdd}
+        isEdit={true}
       />
-            <Success
+      <Success
         isDialogOpen={isSuccess}
         handleDialogClose={handleSuccessClose}
         message="You have updated the book successfully."

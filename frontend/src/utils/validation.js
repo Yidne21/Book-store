@@ -27,3 +27,13 @@ export const signUpSchema = z
       });
     }
   });
+
+export const addBookSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  author: z.string().min(3, "Author must be at least 3 characters"),
+});
+
+export const updateBookSchema = z.object({
+  quantity: z.string().min(1, "Quantity must be a positive number"),
+  rentPrice: z.string().min(1, "Rent price must be a positive number"),
+});

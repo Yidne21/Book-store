@@ -9,6 +9,7 @@ import BookSelect from "../Menu/BookSelect";
 import AddBookPopUp from "../Dialog/AddBookPopUp";
 import { useCreateBook } from "../../hooks";
 import Success from "../Dialog/Success";
+import { updateBookSchema } from "../../utils/validation";
 
 const UploadBook = ({ books, selectedBookId }) => {
   const [bookId, setBookId] = useState("");
@@ -23,6 +24,8 @@ const UploadBook = ({ books, selectedBookId }) => {
     file: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+
 
   const createBookMutation = useCreateBook();
 
@@ -63,7 +66,18 @@ const UploadBook = ({ books, selectedBookId }) => {
   };
 
   const handleSubmit = () => {
+    const result = updateBookSchema.safeParse(newBook);
     setIsSubmitting(true);
+    if (!result.success) {
+      const errors = result.error.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+      setFormErrors(errors);
+      setIsSubmitting(false);
+      return;
+    }
+
     const { file, ...bookDetails } = newBook;
     createBookMutation.mutate({ bookDetails, file }, {
       onSuccess: () => {
@@ -102,7 +116,7 @@ const UploadBook = ({ books, selectedBookId }) => {
         handleDialogOpen={handleDialogOpen}
       />
       <UpdateBook 
-      book={newBook} onChange={handleFormChange}/>
+      book={newBook} onChange={handleFormChange} formErrors={formErrors}/>
       <AddBookPopUp
         isDialogOpen={isDialogOpen}
         handleDialogClose={handleDialogClose}

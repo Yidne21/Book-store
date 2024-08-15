@@ -35,7 +35,7 @@ function CustomTable({
       },
     },
     onColumnFiltersChange: setFilters,
-    state: { columnFilters: filters }, // Use 'columnFilters' instead of 'filters'
+    state: { filters },
     renderTopToolbarCustomActions: () => (
       <Typography
         variant="h6"

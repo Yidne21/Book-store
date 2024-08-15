@@ -1,14 +1,25 @@
 import React from "react";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, CircularProgress } from "@mui/material";
 import { addBookFormData } from "../../utils/constant";
 import { useGetCategoriesNames } from "../../hooks";
 import CategorySelect from "../Menu/CategorySelect";
 
-function AddBook({ newBook, handleFormChange }) {
+function AddBook({ newBook, handleFormChange, formErrors }) {
   const { data: categories, isLoading: categoryLoading } = useGetCategoriesNames();
 
   if (categoryLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress size={24}/>
+      </Box>
+    );
   }
 
   return (
@@ -29,9 +40,12 @@ function AddBook({ newBook, handleFormChange }) {
           name={item.name}
           label={item.label}
           value={newBook[item.name]}
+          type={item.type}
           onChange={handleFormChange}
           variant="outlined"
           fullWidth
+          error={!!formErrors[item.name]} 
+          helperText={formErrors[item.name]}
         />
       ))}
       <CategorySelect
