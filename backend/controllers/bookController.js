@@ -37,6 +37,7 @@ export const filterBooks = async (req, res) => {
     bookStatus,
     ownerId,
   } = req.query;
+
   try {
     // Build the filter criteria for the Book table
     let bookFilter = {};
@@ -84,6 +85,7 @@ export const filterBooks = async (req, res) => {
           where: ownerFilter,
         },
       ],
+      order: [["id", "ASC"]],
     };
 
     const books = await db.Book.findAll(options);

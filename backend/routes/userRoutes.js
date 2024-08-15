@@ -3,6 +3,7 @@ import {
   getListOfOwners,
   updateOwnerStatus,
   myBalance,
+  deleteOwner,
 } from "../controllers/userController";
 import authenticateJwt from "../middlewares/authMiddleware";
 import { authorize } from "../middlewares/caslMiddleware";
@@ -31,5 +32,12 @@ router.put(
 );
 
 router.get("/balance", authenticateJwt, myBalance);
+
+router.delete(
+  "/delete/:ownerId",
+  authenticateJwt,
+  authorize("delete", "Owner"),
+  deleteOwner
+);
 
 export default router;

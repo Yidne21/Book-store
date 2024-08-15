@@ -10,6 +10,7 @@ export function defineAbilityFor(user) {
     can("approve", "Book");
     can("filter", "Book");
     can("unapprove", "Book");
+    can("delete", "Owner");
   } else if (user.role === "owner") {
     can("read", "Book", { userId: user.id });
     can("update", "Book", { userId: user.id });

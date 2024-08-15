@@ -16,3 +16,8 @@ export const myBalance = async () => {
   const { data } = await axiosInstance.get("/users/balance");
   return data;
 };
+
+export const deleteOwner = async (ownerId) => {
+  const { data } = await axiosInstance.delete(`/users/delete/${ownerId}`);
+  return data;
+};

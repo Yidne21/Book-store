@@ -87,3 +87,23 @@ export const myBalance = async (req, res, next) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const deleteOwner = async (req, res, next) => {
+  const { ownerId } = req.params;
+  try {
+    const user = await db.User.findOne({ where: { id: ownerId } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (user.role === "owner") {
+      await user.destroy();
+      return res.status(200).json({ message: "Owner deleted" });
+    }
+
+    return res.status(400).json({ error: "User is not an owner" });
+  } catch (error) {
+    next(error);
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+};

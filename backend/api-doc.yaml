@@ -1,0 +1,602 @@
+openapi: 3.0.0
+info:
+  title: Book Rental Service API
+  version: 1.0.0
+  description: This API allows users to manage books, rentals, and user information for a book rental service.
+servers:
+  - url: https://api.yourdomain.com/api/v1
+    description: Main (production) server
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        category:
+          type: string
+        quantity:
+          type: integer
+        rentPrice:
+          type: number
+        status:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - title
+        - author
+        - category
+        - quantity
+        - rentPrice
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        location:
+          type: string
+        phone:
+          type: string
+        role:
+          type: string
+        balance:
+          type: number
+
+    Rental:
+      type: object
+      properties:
+        id:
+          type: integer
+        bookId:
+          type: integer
+        userId:
+          type: integer
+        quantity:
+          type: integer
+        status:
+          type: string
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+paths:
+  /books:
+    post:
+      tags:
+        - Books
+      summary: Create a new book
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad Request
+
+    get:
+      tags:
+        - Books
+      summary: Get a list of books filtered by various criteria
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: author
+          schema:
+            type: string
+        - in: query
+          name: ownerLocation
+          schema:
+            type: string
+        - in: query
+          name: ownerName
+          schema:
+            type: string
+        - in: query
+          name: ownerStatus
+          schema:
+            type: string
+        - in: query
+          name: bookStatus
+          schema:
+            type: string
+        - in: query
+          name: ownerId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '500':
+          description: Internal Server Error
+
+  /books/{bookId}:
+    put:
+      tags:
+        - Books
+      summary: Update an existing book entry
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Updated book object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+        '400':
+          description: Bad Request
+
+    delete:
+      tags:
+        - Books
+      summary: Delete a book entry
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book deleted successfully
+        '404':
+          description: Book not found
+        '500':
+          description: Internal Server Error
+
+  /books/my-books:
+    get:
+      tags:
+        - Books
+      summary: Retrieve all books uploaded by the authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of books uploaded by the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '500':
+          description: Internal Server Error
+
+  /books/approve/{bookId}:
+    put:
+      tags:
+        - Books
+      summary: Approve a book
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [approved, unapproved]
+      responses:
+        '200':
+          description: Book status updated
+        '404':
+          description: Book not found
+        '400':
+          description: Bad Request
+
+  /books/reject/{bookId}:
+    put:
+      tags:
+        - Books
+      summary: Reject a book
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [approved, unapproved]
+      responses:
+        '200':
+          description: Book status updated
+        '404':
+          description: Book not found
+        '400':
+          description: Bad Request
+
+  /books/category-analysis:
+    get:
+      tags:
+        - Books
+      summary: Get books grouped by category
+      responses:
+        '200':
+          description: List of books grouped by category
+        '500':
+          description: Internal Server Error
+
+  /books/names:
+    get:
+      tags:
+        - Books
+      summary: Get book names with IDs for the authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of book names with IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+        '500':
+          description: Internal Server Error
+
+  /books/owner/category-analysis:
+    get:
+      tags:
+        - Books
+      summary: Get the authenticated user's live books grouped by category
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of live books grouped by category
+        '500':
+          description: Internal Server Error
+
+  /books/categories:
+    get:
+      tags:
+        - Books
+      summary: Get all book categories
+      responses:
+        '200':
+          description: List of book categories
+        '500':
+          description: Internal Server Error
+
+  /books/{bookId}:
+    get:
+      tags:
+        - Books
+      summary: Get details of a book by ID
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+        '500':
+          description: Internal Server Error
+
+  /rentals/rent/{bookId}:
+    post:
+      tags:
+        - Rentals
+      summary: Rent a book
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  required: true
+      responses:
+        '200':
+          description: Book rented successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rental'
+        '404':
+          description: Book not found
+        '400':
+          description: Not enough books available
+        '500':
+          description: Internal Server Error
+
+  /rentals/return/{rentalId}:
+    put:
+      tags:
+        - Rentals
+      summary: Return a rented book
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: rentalId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rental'
+        '404':
+          description: Rental not found
+        '500':
+          description: Internal Server Error
+
+  /users/owners:
+    get:
+      tags:
+        - Users
+      summary: Get a list of all owners
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of owners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+
+  /users/approve/{ownerId}:
+    put:
+      tags:
+        - Users
+      summary: Approve an owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ownerId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [approved, unapproved]
+      responses:
+        '200':
+          description: Owner status updated
+        '404':
+          description: User not found
+        '400':
+          description: User is not an owner
+
+  /users/disable/{ownerId}:
+    put:
+      tags:
+        - Users
+      summary: Disable an owner
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: ownerId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [approved, unapproved]
+      responses:
+        '200':
+          description: Owner status updated
+        '404':
+          description: User not found
+        '400':
+          description: User is not an owner
+
+  /users/balance:
+    get:
+      tags:
+        - Users
+      summary: Get the authenticated user's balance
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User's balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: Sign up a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login a user and return a JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  location:
+                    type: string
+                  phone:
+                    type: string
+                  role:
+                    type: string
+                  balance:
+                    type: number
+        '401':
+          description: Unauthorized - Invalid email or password
+        '500':
+          description: Internal Server Error
