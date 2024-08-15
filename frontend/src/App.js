@@ -87,8 +87,14 @@ function App() {
             }
           />
         </Route>
-
-        <Route path="*" element={<Navigate to={"/signup"} />} />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={localStorage.getItem("token") ? `/dashboard` : "/signup"}
+            />
+          }
+        />
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </Router>
