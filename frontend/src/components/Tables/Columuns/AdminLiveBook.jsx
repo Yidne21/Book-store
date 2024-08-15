@@ -58,7 +58,7 @@ export const AdminLiveBook =
               }}
             />
           </Box>
-          <Box>{row.original.availableQuantity === 0 ? "Unavailable" : "Available"}</Box>
+          <Box>{row.original.availableQuantity === 0 && row.original.status === "unapproved" ? "Unavailable" : "Available"}</Box>
         </Box>
       ),
     },
