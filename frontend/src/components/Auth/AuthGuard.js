@@ -6,13 +6,8 @@ function AuthGuard({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
     if (!token) {
       navigate("/signup");
-    }
-
-    if (role) {
-      navigate(`/dashboard/${role}`);
     }
   }, [navigate]);
 

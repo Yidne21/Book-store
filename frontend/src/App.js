@@ -89,16 +89,6 @@ function App() {
         </Route>
 
         <Route path="/unauthorized" element={<Unauthorized />} />
-
-        {/* Redirect to Dashboard if logged in, otherwise to Signup */}
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to={localStorage.getItem("token") ? `/dashboard` : "/signup"}
-            />
-          }
-        />
       </Routes>
     </Router>
   );

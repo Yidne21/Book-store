@@ -42,12 +42,10 @@ const LoginForm = () => {
         localStorage.setItem("role", data.role);
         defineAbilitiesFor(data.role);
 
-        if (data.role === 'admin') {
-          navigate('/dashboard/admin');
+        if (data.role) {
+          navigate(`/dashboard/${data.role}`);
         }
-        if (data.role === 'owner') {
-          navigate('/dashboard/owner');
-        }
+
       },
       onError: (error) => {
         setError(error.response.data.error);
