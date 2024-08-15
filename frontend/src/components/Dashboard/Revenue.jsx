@@ -69,7 +69,7 @@ const Revenue = ({
       </Box>
       <Box>
         <Typography sx={{ fontSize: 12, opacity: 0.8 }}>
-          Compered to ETB {balance} last month
+          Compered to ETB {balance.toFixed(2)} last month
         </Typography>
         <Box
           sx={{

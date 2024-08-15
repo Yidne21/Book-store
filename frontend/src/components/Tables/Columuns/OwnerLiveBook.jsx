@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import { useDeleteBook } from "../../../hooks";
 import { useNavigate } from "react-router-dom"; // Assuming you're using react-router-dom for navigation
-
+import { CircularProgress } from "@mui/material";
 export const ownerLiveBook = [
   {
     header: "No.",
@@ -83,20 +83,35 @@ export const ownerLiveBook = [
       const bookId = id;
       const navigate = useNavigate();
       const deleteBook = useDeleteBook();
+      const [isDeleting, setIsDeleting] = React.useState(false);
 
       const handleEditClick = () => {
         navigate(`/dashboard/books/${bookId}`);
       };
 
       const handleDeleteClick = () => {
-        deleteBook.mutate(bookId);
+        setIsDeleting(true);
+        deleteBook.mutate(bookId, {
+          onSuccess: () => {
+            setIsDeleting(false);
+          },
+          onError: () => {
+            setIsDeleting(false);
+          },
+        });
       };
 
       return (
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <EditIcon onClick={handleEditClick} style={{ cursor: 'pointer' }} />
-            <DeleteIcon sx={{ color: "red" }} onClick={handleDeleteClick} style={{ cursor: 'pointer' }} />
+          </Box>
+          {isDeleting ? (
+            <CircularProgress size={20} />
+          ) : (
+            <DeleteIcon onClick={handleDeleteClick} style={{ cursor: 'pointer' }} color="error" />
+          )}
+          <Box>
           </Box>
         </Box>
       );

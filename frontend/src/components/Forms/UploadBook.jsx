@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import UpdateBook from "./UpdateBook";
@@ -21,6 +22,7 @@ const UploadBook = ({ books, selectedBookId }) => {
     rentPrice: "",
     file: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const createBookMutation = useCreateBook();
 
@@ -61,8 +63,16 @@ const UploadBook = ({ books, selectedBookId }) => {
   };
 
   const handleSubmit = () => {
+    setIsSubmitting(true);
     const { file, ...bookDetails } = newBook;
-    createBookMutation.mutate({ bookDetails, file });
+    createBookMutation.mutate({ bookDetails, file }, {
+      onSuccess: () => {
+        setIsSubmitting(false);
+      },
+      onError: () => {
+        setIsSubmitting(false);
+      },
+    });
     setIsDialogOpen(false);
   };
 
@@ -103,16 +113,16 @@ const UploadBook = ({ books, selectedBookId }) => {
       <Success
         isDialogOpen={isSuccess}
         handleDialogClose={handleSuccessClose}
-        message="You have uploaded book successfully. Wait until we approve it."
+        message="You have uploaded the book successfully. Wait until we approve it."
       />
       <Button
         variant="contained"
         color="primary"
         sx={{ mt: 5, width: 300, height: 50, borderRadius: 10 }}
         onClick={handleSubmit}
-        disabled={createBookMutation.isLoading}
+        disabled={isSubmitting}
       >
-       {createBookMutation.isLoading ? "Uploading..." : "Submit"}
+       {isSubmitting ? <CircularProgress size={24} color="primary" /> : "Submit"}
       </Button>
     </Box>
   );

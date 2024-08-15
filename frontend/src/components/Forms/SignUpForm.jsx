@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Box, Button, Checkbox, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, CircularProgress, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { SignUpFormData } from '../../utils/constant';
 import { signUpSchema } from '../../utils/validation';
@@ -11,6 +11,7 @@ function SignUpForm() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', location: '', phone: '', role: "owner" });
   const [formErrors, setFormErrors] = useState({});
   const [error, setError] = useState(null);
+  const [isSigningUp, setIsSigningUp] = useState(false);
   const navigate = useNavigate();
 
   const signUpMutation = useSignUp();
@@ -24,9 +25,11 @@ function SignUpForm() {
   }
 
   const handleSignUp = () => {
+    setIsSigningUp(true);
     const result = signUpSchema.safeParse(formData);
 
     if (!result.success) {
+      setIsSigningUp(false);
       const errors = result.error.errors.reduce((acc, error) => {
         acc[error.path[0]] = error.message;
         return acc;
@@ -37,9 +40,11 @@ function SignUpForm() {
 
     signUpMutation.mutate(formData, {
       onSuccess: () => {
+        setIsSigningUp(false);
         navigate("/login");
       },
       onError: (error) => {
+        setIsSigningUp(false);
         setError(error.response.data.error);
       },
     });
@@ -72,8 +77,8 @@ function SignUpForm() {
         <Checkbox />
         <Typography>I accept the Terms and Conditions</Typography>
       </Box>
-        <Button variant="contained" sx={{ width: "100%" }} onClick={handleSignUp} disabled={signUpMutation.isLoading}>
-          {signUpMutation.isLoading ? "Signing Up..." : "SIGN UP"}
+        <Button variant="contained" sx={{ width: "100%" }} onClick={handleSignUp} disabled={isSigningUp}>
+          {isSigningUp ? <CircularProgress size={24} color="primary" /> : "SIGN UP"}
         </Button>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Typography>Already have an account?</Typography>

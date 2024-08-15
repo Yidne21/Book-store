@@ -15,7 +15,14 @@ import {
 
 import { signUp, login } from "../api/auth";
 import { rentBook, returnBook, totalIncome } from "../api/rental";
-import { getListOfOwners, updateOwnerStatus, myBalance } from "../api/user";
+import {
+  getListOfOwners,
+  updateOwnerStatus,
+  myBalance,
+  deleteOwner,
+} from "../api/user";
+
+import { useState, useEffect } from "react";
 
 // Auth Hooks
 export const useLogin = () => {
@@ -175,3 +182,29 @@ export const useMyBalance = () => {
     queryFn: myBalance,
   });
 };
+
+export const useDeleteOwner = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (ownerId) => deleteOwner(ownerId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["owners"] });
+    },
+  });
+};
+
+export function useDebounce(value, delay) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}

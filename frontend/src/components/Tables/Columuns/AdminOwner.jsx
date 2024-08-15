@@ -4,7 +4,7 @@ import {
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import React, { useState } from "react";
-import { useUpdateOwnerStatus } from "../../../hooks";
+import { useUpdateOwnerStatus, useDeleteOwner } from "../../../hooks";
 import OwnerDetail from "../../Dialog/OwnerDetail";
 import AdminOwnerAction from "../../Button/AdminOwnerAction";
 
@@ -78,8 +78,14 @@ export const adminOwner = [
     size: 200,
     Cell: ({ row }) => {
       const { id, status } = row.original;
-      const mutation = useUpdateOwnerStatus();
       const [open, setOpen] = useState(false);
+      const [isApproving, setIsApproving] = useState(false);
+      const [isDeleting, setIsDeleting] = useState(false);
+
+      const deleteMutation = useDeleteOwner();
+      const approveMutation = useUpdateOwnerStatus();
+
+
 
       const isApproved = status === "approved";
 
@@ -92,13 +98,29 @@ export const adminOwner = [
       };
 
       const handleDelete = () => {
-        console.log(`Deleting owner with id: ${id}`);
-        // Your delete logic here
+        setIsDeleting(true);
+        const ownerId = id;
+        deleteMutation.mutate(ownerId, {
+          onSuccess: () => {
+            setIsDeleting(false);
+          },
+          onError: () => {
+            setIsDeleting(false);
+          },
+        });
       };
 
       const handleApprove = () => {
+        setIsApproving(true);
         const newStatus = isApproved ? "unapproved" : "approved";
-        mutation.mutate({ ownerId: id, status: newStatus });
+        approveMutation.mutate({ ownerId: id, status: newStatus }, {
+          onSuccess: () => {
+            setIsApproving(false);
+          },
+          onError: () => {
+            setIsApproving(false);
+          },
+        });
       };
 
       return (
@@ -108,6 +130,8 @@ export const adminOwner = [
             handleDelete={handleDelete}
             handleApprove={handleApprove}
             isApproved={isApproved}
+            isApproving={isApproving}
+            isDeleting={isDeleting}
           />
           <OwnerDetail open={open} handleClose={handleClose} row={row} />
         </>

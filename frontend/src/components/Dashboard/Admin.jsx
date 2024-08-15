@@ -10,18 +10,31 @@ import {
   useGetCategoryAnalysis,
   useTotalIncome,
   useFilterBooks,
+  useDebounce
 } from "../../hooks";
+
 
 const AdminDashboard = () => {
   const [filters, setFilters] = useState([]);
+  const [filter, setFilter] = useState({});
+
+  const handleFilterChange = (newFilters) => {
+    const transformedFilters = newFilters().reduce((acc, filter) => {
+      if (filter.value) {
+        acc[filter.id] = filter.value;
+      }
+      return acc;
+    }, {});
+  
+    setFilter(transformedFilters);
+    setFilters(newFilters);
+  };
+
+  const debouncedFilter = useDebounce(filter, 1000); // Adjust the delay as needed (500ms in this example)
+
 
   const { data, error, isLoading } = useFilterBooks({
-    bookStatus: "approved",
-    ownerStatus: "approved",
-    ...filters.reduce((acc, filter) => {
-      acc[filter.id] = filter.value;
-      return acc;
-    }, {}),
+    ...debouncedFilter,
   });
 
   const { data: categoryAnalysis, isLoading: isCategoryAnalyLoading } =
@@ -99,7 +112,7 @@ const AdminDashboard = () => {
           data={data}
           maxHeight="300px"
           title="Live Book status"
-          setFilters={setFilters}
+          setFilters={handleFilterChange}
           filters={filters}
         />
         <Box

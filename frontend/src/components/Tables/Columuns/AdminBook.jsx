@@ -42,20 +42,22 @@ export const AdminBook = [
     size: 150,
     Cell: ({ row }) => {
       const { id, status } = row.original;
+      const [isApproving, setIsApproving] = React.useState(false);
       const mutation = useUpdateBookStatus();
 
       const isApproved = status === "approved";
 
       const handleSwitchChange = (event) => {
+        setIsApproving(true);
         const newStatus = event.target.checked ? "approved" : "unapproved";
         mutation.mutate(
           { bookId: id, status: newStatus },
           {
             onSuccess: () => {
-              console.log(`Book status updated to ${newStatus}`);
+              setIsApproving(false);
             },
             onError: (error) => {
-              console.error("Error updating book status:", error);
+              setIsApproving(false);
             },
           }
         );
@@ -82,6 +84,8 @@ export const AdminBook = [
             color="success"
             checked={isApproved}
             onChange={handleSwitchChange}
+            disabled={isApproving}
+            style={{ cursor: "pointer" }}
           />
         </Box>
       );

@@ -1,24 +1,41 @@
-import React, { useState } from 'react';
-import { Box, Typography, CircularProgress } from '@mui/material';
-import { useFilterBooks } from '../hooks';
-import CustomTable from '../components/Tables/Table';
-import { AdminBook } from '../components/Tables/Columuns/AdminBook';
+import React, { useState } from "react";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import { useFilterBooks } from "../hooks";
+import CustomTable from "../components/Tables/Table";
+import { AdminBook } from "../components/Tables/Columuns/AdminBook";
+import { useDebounce } from "../hooks";
 
 export default function BookList() {
+  const [filter, setFilter] = useState({});
   const [filters, setFilters] = useState([]);
 
-  const { data, error, isLoading } = useFilterBooks({
-    ...filters.reduce((acc, filter) => {
-      acc[filter.id] = filter.value;
+  const handleFilterChange = (newFilters) => {
+    const transformedFilters = newFilters().reduce((acc, filter) => {
+      if (filter.value) {
+        acc[filter.id] = filter.value;
+      }
       return acc;
-    }
-    , {})
-  });
+    }, {});
+  
+    setFilter(transformedFilters);
+    setFilters(newFilters);
+  };
+  
+  const debouncedFilter = useDebounce(filter, 1000); // Adjust the delay as needed (500ms in this example)
 
+
+  const { data, error, isLoading } = useFilterBooks({
+    ...debouncedFilter,
+  });
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <CircularProgress />
       </Box>
     );
@@ -27,7 +44,9 @@ export default function BookList() {
   if (error) {
     return (
       <Box textAlign="center" mt={2}>
-        <Typography color="error">Error fetching books: {error.message}</Typography>
+        <Typography color="error">
+          Error fetching books: {error.message}
+        </Typography>
       </Box>
     );
   }
@@ -39,7 +58,7 @@ export default function BookList() {
         data={data}
         maxHeight="470px"
         title="List of Books"
-        setFilters={setFilters}
+        setFilters={handleFilterChange}
         filters={filters}
       />
     </Box>

@@ -16,6 +16,7 @@ function CustomTable({
   const table = useMaterialReactTable({
     columns,
     data,
+    enableSorting: false,
     enableColumnActions: false,
     enablePagination: false,
     enableTableFooter: false,
@@ -33,8 +34,8 @@ function CustomTable({
         fontWeight: "normal",
       },
     },
-    onColumnFiltersChange: setFilters, //hoist internal columnFilters state to your state
-    state: { filters }, //pass in your own managed columnFilters state
+    onColumnFiltersChange: setFilters,
+    state: { columnFilters: filters }, // Use 'columnFilters' instead of 'filters'
     renderTopToolbarCustomActions: () => (
       <Typography
         variant="h6"

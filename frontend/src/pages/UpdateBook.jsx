@@ -11,6 +11,7 @@ export default function UpdateBook() {
   const { bookId } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
 
   const { data: book, error, isLoading } = useGetBookById(bookId);
@@ -77,9 +78,16 @@ export default function UpdateBook() {
   };
 
   const handleSubmit = () => {
-    console.log("Updated Book:", updatedBook);
+    setIsUpdating(true);
     const { file, ...updatedDetails } = updatedBook;
-    updateBookMutation.mutate({ bookId, updatedDetails, file });
+    updateBookMutation.mutate({ bookId, updatedDetails, file }, {
+      onSuccess: () => {
+        setIsUpdating(false);
+      },
+      onError: () => {
+        setIsUpdating(false);
+      },
+    });
     setIsDialogOpen(false);
   };
 
@@ -144,15 +152,16 @@ export default function UpdateBook() {
             <Success
         isDialogOpen={isSuccess}
         handleDialogClose={handleSuccessClose}
-        message="You have updated The book successfully."
+        message="You have updated the book successfully."
       />
       <Button
         variant="contained"
         color="primary"
         sx={{ mt: 5, width: 300, height: 50, borderRadius: 10 }}
         onClick={handleSubmit}
+        disabled={isUpdating}
       >
-        Submit
+        {isUpdating ? <CircularProgress size={24} color="primary" /> : "Update"}
       </Button>
     </Box>
   );

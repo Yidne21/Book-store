@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Checkbox, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, TextField, Typography, CircularProgress } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../hooks";
 import { loginFormData } from "../../utils/constant";
@@ -15,6 +15,7 @@ const LoginForm = () => {
   const [formErrors, setFormErrors] = useState({});
   const [error, setError] = useState(null);
   const loginMutation = useLogin();
+  const [isLogging, setIsLogging] = useState(false);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -26,8 +27,10 @@ const LoginForm = () => {
 
   const handleLogin = () => {
     const result = loginSchema.safeParse(formData);
+    setIsLogging(true);
 
     if (!result.success) {
+      setIsLogging(false);
       const errors = result.error.errors.reduce((acc, error) => {
         acc[error.path[0]] = error.message;
         return acc;
@@ -38,6 +41,7 @@ const LoginForm = () => {
 
     loginMutation.mutate(formData, {
       onSuccess: (data) => {
+        setIsLogging(false);
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
         defineAbilitiesFor(data.role);
@@ -48,6 +52,7 @@ const LoginForm = () => {
 
       },
       onError: (error) => {
+        setIsLogging(false);
         setError(error.response.data.error);
       },
     });
@@ -79,8 +84,9 @@ const LoginForm = () => {
         <Checkbox />
         <Typography>Remember me</Typography>
       </Box>
-      <Button variant="contained" sx={{ width: "100%" }} onClick={handleLogin} disabled={loginMutation.isLoading}>
-        LOGIN
+      
+      <Button variant="contained" sx={{ width: "100%" }} onClick={handleLogin} disabled={isLogging}>
+        {isLogging ? <CircularProgress size={24} color="primary"  />  : "LOGIN"}
       </Button>
 
       <Box sx={{ display: "flex", justifyContent: "center" }}>
