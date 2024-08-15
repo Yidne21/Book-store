@@ -33,8 +33,8 @@ export const filterBooks = async (req, res) => {
     author,
     ownerLocation,
     ownerName,
-    ownerStatus = "approved",
-    bookStatus = "approved",
+    ownerStatus,
+    bookStatus,
     ownerId,
   } = req.query;
 

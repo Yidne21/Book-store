@@ -34,6 +34,8 @@ const AdminDashboard = () => {
 
 
   const { data, error, isLoading } = useFilterBooks({
+    ownerStatus: "approved",
+    bookStatus: "approved",
     ...debouncedFilter,
   });
 
